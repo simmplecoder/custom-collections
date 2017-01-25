@@ -1,10 +1,10 @@
-#`CustomLinkedList<T>` implementation status.
+#<font color="purple">CustomLinkedList</font> implementation status
 
 <h2>Features</h2>
 
 Checked checkbox will mean that feature is implemented, but not if tests are passing. 
  
-<h3>`Object` interface implementation status: full</h3>
+<h3><font color="purple">Object</font> interface implementation status: full</h3>
  
  - [x] `toString()` method. Tests: <font color="green">passed</font>
  
@@ -12,22 +12,26 @@ Checked checkbox will mean that feature is implemented, but not if tests are pas
  
  - [x] `equals()` method. Tests: <font color="green">passed</font>
  
-   Note: heavily depends on `size()` working correctly.
+   Note: heavily depends on `size` maintained correctly.
  
- - [x] `hashCode()` method. Tests: <font color="green">passed</font>. 
+ - [x] `hashCode()` method. Tests: <font color="green">passed</font> 
 
    <font color="yellow">Bugfix</font>: lists that were anagrams were giving the same hashcode
    
 Three function listed in the *Effective Java, Second Edition* were implemented, other weird `Object` methods will not be considered.
  
-<h3>`Collection<T>` interface implementation status: partial</h3>
+<h3><font color="purple">Collection</font> interface implementation status: partial</h3>
 
- - [x] `add(T object)` method. Tests: <font color="green">passed</font>
+ - [x] `add(T object)` method. Tests: <font color="green">passed</font> 
+ 
  - [x] `get(int index)` method. Tests: <font color="green">passed</font> 
+ 
  - [x] `clear()` method. Tests: <font color="blue">Not required</font>.
  
-   Note: the function is too small and easy, thus doesn't require tests.
+    Note: the function is too small and easy, thus doesn't require tests.
+    
  - [x] `remove(Object o)` method. Tests: <font color="green">passed</font>
+ 
  - [x] `size()` method. Tests: <font color="green">passed</font>
  
     Note: `size` field should be maintained by modifier functions.

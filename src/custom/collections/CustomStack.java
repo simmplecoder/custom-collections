@@ -1,4 +1,4 @@
-package CustomCollections;
+package custom.collections;
 
 import java.util.EmptyStackException;
 import java.util.LinkedList;

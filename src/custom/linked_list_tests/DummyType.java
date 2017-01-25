@@ -1,4 +1,4 @@
-package CustomLinkedListTests;
+package custom.linked_list_tests;
 
 /**
  * Created by olzhas on 1/25/17.

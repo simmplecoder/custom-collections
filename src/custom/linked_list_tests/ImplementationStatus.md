@@ -32,11 +32,25 @@ Three function listed in the *Effective Java, Second Edition* were implemented, 
     
  - [x] `remove(Object o)` method. Tests: <font color="green">passed</font>
  
+   <font color="yellow">Bugfix:</font> it was keeping the objects when doing reverse traversal of the list
+ 
  - [x] `size()` method. Tests: <font color="green">passed</font>
  
     Note: `size` field should be maintained by modifier functions.
     
-Most of the non `*All(Collection<? extends T>)` functions were implemented. Further progression will require major leap.
+ - [x] `iterator()` method. Tests: <font color="blue">Not Required</font>
+ 
+<h3><font color="purple">Iterator</font> interface implementation status: full</h3>
+
+ - [x] `next()` method. Tests: <font color="green">passed</font>
+ 
+ - [x] `hasNext()` method. Tests: <font color="green">passed</font>
+ 
+ - [x] `remove()` method. Tests: <font color="red">To be written</font>
+
+ 
+ <hr>   
+Most of the non `*All(Collection&lt? extends T&gt)` functions were implemented. Further progression will require major leap.
  
 <h2>Testing methodology</h2>
 

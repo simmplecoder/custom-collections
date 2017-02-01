@@ -1,47 +1,96 @@
 package custom.collections;
 
-public class CustomLinkedList<T> {
+import java.util.Collection;
+import java.util.NoSuchElementException;
+
+public class CustomLinkedList<E>  implements Collection<E>{
     private class Node
     {
         private Node prev;
-        private T value;
+        private E value;
         private Node next;
 
-        public Node(Node prev, T value, Node next) {
+        Node(Node prev, E value, Node next) {
             this.setPrev(prev);
             this.setValue(value);
             this.setNext(next);
         }
 
-        public Node getPrev() {
+        Node getPrev() {
             return prev;
         }
 
-        public void setPrev(Node prev) {
+        void setPrev(Node prev) {
             this.prev = prev;
         }
 
-        public T getValue() {
+        E getValue() {
             return value;
         }
 
-        public void setValue(T value) {
+        void setValue(E value) {
             this.value = value;
         }
 
-        public Node getNext() {
+        Node getNext() {
             return next;
         }
 
-        public void setNext(Node next) {
+        void setNext(Node next) {
             this.next = next;
+        }
+    }
+
+    private class Iterator implements java.util.Iterator<E>
+    {
+        private Node next;
+        boolean nextCalled = false;
+
+        Iterator(Node root)
+        {
+            next = root;
+            nextCalled = true;
+        }
+
+        @Override
+        public boolean hasNext()
+        {
+            return next != null;
+        }
+
+        @Override
+        public E next()
+        {
+            if (!hasNext())
+            {
+                throw new NoSuchElementException();
+            }
+
+            E result = next.getValue();
+            next = next.getNext();
+            nextCalled = true;
+
+            return result;
+        }
+
+        @Override
+        public void remove()
+        {
+            if (!nextCalled)
+            {
+                throw new IllegalStateException();
+            }
+
+            CustomLinkedList.this.remove(next);
+            nextCalled = false;
         }
     }
 
     private Node root;
     private int size = 0;
 
-    public boolean add(T object)
+    @Override
+    public boolean add(E object)
     {
         if (root == null)
         {
@@ -62,66 +111,25 @@ public class CustomLinkedList<T> {
         return true;
     }
 
-    public void clear()
+    @Override
+    public boolean addAll(Collection<? extends E> c)
     {
-        root = null;
-        size = 0;
-    }
-
-    boolean contains(Object o)
-    {
-        Node current = root;
-        while (current != null)
-        {
-            if (current.getValue().equals(o))
-            {
-                return true;
-            }
-
-            current = current.getNext();
+        if (c == null) {
+            throw new NullPointerException("Container must not be null");
         }
 
-        return false;
-    }
+        java.util.Iterator<? extends E> iterator = c.iterator();
 
-    public boolean isEmpty()
-    {
-        return size == 0;
-    }
-
-    public boolean remove(Object o)
-    {
-        Node current = root;
-        while (current != null)
+        while (iterator.hasNext())
         {
-            if (current.getValue().equals(o))
-            {
-                if (current == root)
-                {
-                    root = current.getNext();
-                }
-                else if (current.getNext() == null)
-                {
-                    current.getPrev().setNext(null);
-                }
-                else
-                {
-                    current
-                            .getPrev()
-                            .setNext(current.getNext());
-                }
-
-                --size;
-                return true;
-            }
-
-            current = current.getNext();
+            add(iterator.next());
         }
 
-        return false;
+        return true;
     }
 
-    public T get(int index)
+
+    public E get(int index)
     {
         if (index < 0)
         {
@@ -143,6 +151,196 @@ public class CustomLinkedList<T> {
         return current.getValue();
     }
 
+    @Override
+    public boolean contains(Object o)
+    {
+        Node current = root;
+        while (current != null)
+        {
+            if (current.getValue().equals(o))
+            {
+                return true;
+            }
+
+            current = current.getNext();
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c)
+    {
+        if (c == null)
+        {
+            throw new NullPointerException();
+        }
+
+        java.util.Iterator<?> iterator = c.iterator();
+
+        while (iterator.hasNext())
+        {
+            if (!contains(iterator.next()))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return size == 0;
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        Object[] result = new Object[size];
+
+        Node current = root;
+        int index = 0;
+        while (current != null)
+        {
+            result[index] = current.getValue();
+            current = current.getNext();
+            ++index;
+        }
+
+        return result;
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a)
+    {
+        T[] result = a;
+
+        if (a.length < size)
+        {
+            result = new T[size];
+        }
+
+        Node current = root;
+        int index = 0;
+        while (current != null)
+        {
+            if (!(result[index] instanceof E))
+            {
+
+            }
+        }
+    }
+
+    public boolean remove(Object o)
+    {
+        Node current = root;
+        while (current != null)
+        {
+            if (current.getValue().equals(o))
+            {
+                if (current == root)
+                {
+                    root = current.getNext();
+                }
+                else if (current.getNext() == null)
+                {
+                    current.getPrev().setNext(null);
+                }
+                else
+                {
+                    current.getPrev().setNext(current.getNext());
+                    current.getNext().setPrev(current.getPrev());
+                }
+
+                --size;
+                return true;
+            }
+
+            current = current.getNext();
+        }
+
+        return false;
+    }
+
+    public E remove(int index)
+    {
+        if (index >= size || size < 0)
+        {
+            throw new IndexOutOfBoundsException();
+        }
+
+        Node current = root;
+        while (index > 0)
+        {
+            current = current.getNext();
+            --index;
+        }
+
+        E result = current.getValue();
+        if (size == 1)
+        {
+            root = null;
+        }
+        else if (index == 0)
+        {
+            root = root.getNext();
+        } else
+        {
+            current.getPrev().setNext(current.getNext());
+
+            if (current.getNext() != null)
+            {
+                current.getNext().setPrev(current.getPrev());
+            }
+        }
+
+        --size;
+        return result;
+    }
+
+    private void remove(Node node)
+    {
+        if (node == null)
+        {
+            throw new NullPointerException();
+        }
+
+        if (node == root) //at the beginning of the list
+        {
+            root = node.getNext();
+            if (root != null)
+            {
+                node.setPrev(null);
+            }
+        } else
+        {
+            node.getPrev().setNext(node.getNext());
+
+            if (node.getNext() != null)
+            {
+                node.getNext().setPrev(node.getPrev());
+            }
+        }
+
+        --size;
+    }
+
+    public void clear()
+    {
+        root = null;
+        size = 0;
+    }
+
+
+
+    @Override
+    public java.util.Iterator<E> iterator()
+    {
+        return new Iterator(root);
+    }
+
     public int size()
     {
         return size;
@@ -155,7 +353,10 @@ public class CustomLinkedList<T> {
         Node current = root;
         while (current != null)
         {
-            result.append(current.getValue().toString() + ' ');
+            result
+                    .append(current.getValue().toString())
+                    .append(' ');
+
             current = current.getNext();
         }
 

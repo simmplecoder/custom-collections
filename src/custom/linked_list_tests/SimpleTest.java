@@ -3,9 +3,7 @@ package custom.linked_list_tests;
 import custom.collections.CustomLinkedList;
 import custom.utilities.ANSIIColors;
 
-/**
- * Created by olzhas on 1/25/17.
- */
+import java.util.Iterator;
 
 public class SimpleTest {
     private static void printPassed()
@@ -228,6 +226,141 @@ public class SimpleTest {
         }
     }
 
+    private static void containsTest()
+    {
+        printTestName("Contains test");
+        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+
+        for (int i = 0; i < 10; ++i)
+        {
+            list.add(new DummyType(i));
+        }
+
+        System.out.println("list = " + list.toString());
+
+        boolean result = list.contains(new DummyType(5));
+        if (!result)
+        {
+            printFailed();
+        }
+
+        System.out.println("contains(new DummyType(5)) = " + result);
+
+        result =list.contains(new DummyType(2));
+        if (!result)
+        {
+            printFailed();
+        }
+
+        System.out.println("contains(new DummyType(2)) = " + result);
+        printPassed();
+    }
+
+    private static void iteratorTraversingTest()
+    {
+        printTestName("Iterator traversing test");
+        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+
+        for (int i = 0; i < 10; ++i)
+        {
+            list.add(new DummyType(i));
+        }
+
+        printList(list);
+
+        Iterator<DummyType> listIterator = list.iterator();
+
+        int[] correctResult1 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        iteratorTraversePrintElements(listIterator, correctResult1);
+
+        //try to remove elements in the middle and rerun
+        System.out.println("Removing elements at 2, 3, 4 and rerunning:\n");
+
+        list.remove(new DummyType(2));
+        list.remove(new DummyType(3));
+        list.remove(new DummyType(4));
+
+        listIterator = list.iterator(); //reset the iterator
+        int[] correctResult2 = {0, 1, 5, 6, 7, 8, 9};
+        iteratorTraversePrintElements(listIterator, correctResult2);
+
+        printPassed();
+    }
+
+    private static void iteratorTraversePrintElements(Iterator<DummyType> listIterator, int[] correctResult) {
+        for (int i = 0; i < correctResult.length; ++i)
+        {
+            DummyType current = listIterator.next();
+            System.out.println("Iterator.next() = " + current.toString());
+            if (!current.equals(new DummyType(correctResult[i])))
+            {
+                printFailed("Iterator doesn't properly return underlying elements");
+            }
+        }
+    }
+
+    private static void iteratorRemovalTest()
+    {
+        printTestName("Iterator remove method test:");
+
+        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+
+        for (int i = 0; i < 10 ; ++i)
+        {
+            list.add(new DummyType(i));
+        }
+
+        System.out.println("list = " + list.toString());
+        Iterator<DummyType> listIterator = list.iterator();
+
+
+        for (int i = 0; i < 3; ++i)
+        {
+            listIterator.remove();
+            listIterator.next();
+        }
+
+        System.out.println("Trying to remove 3 elements from the beginning: list = " + list.toString());
+
+        for (int i = 0; i < 3; ++i)
+        {
+            listIterator.next();
+        }
+
+        listIterator.remove();
+        listIterator.next(); //nullified due to previous remove
+        System.out.println("Trying to remove the 7th element DummyType(6): list = " + list.toString());
+
+
+        listIterator.next();
+        listIterator.next();
+
+        listIterator.remove();
+        System.out.println("Trying to remove at the end: list = " + list.toString());
+
+        printPassed();
+    }
+
+    private static void addAllTest()
+    {
+        printTestName("Add all test:");
+
+        CustomLinkedList<DummyType> firstList = new CustomLinkedList<>();
+        CustomLinkedList<DummyType> secondList = new CustomLinkedList<>();
+
+        for (int i = 0; i < 10; ++i)
+        {
+            firstList.add(new DummyType(i));
+            secondList.add(new DummyType(10 + i));
+        }
+
+        System.out.println("firstList = " + firstList.toString());
+        System.out.println("secondList = " + secondList.toString());
+
+        System.out.println("Merging lists into firstList:");
+
+    }
+
     public static void main(String[] args)
     {
         adderTest();
@@ -240,6 +373,15 @@ public class SimpleTest {
 
         removalTest();
 
+        iteratorTraversingTest();
+        iteratorRemovalTest();
+        containsTest();
+
         //System.out.println(list.toString());
+    }
+
+    private static void printList(CustomLinkedList<DummyType> list)
+    {
+        System.out.println("list = " + list.toString());
     }
 }

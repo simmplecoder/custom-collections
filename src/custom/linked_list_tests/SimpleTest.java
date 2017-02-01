@@ -358,7 +358,146 @@ public class SimpleTest {
         System.out.println("secondList = " + secondList.toString());
 
         System.out.println("Merging lists into firstList:");
+        firstList.addAll(secondList);
 
+        CustomLinkedList<DummyType> correctAnswer = new CustomLinkedList<>();
+        for (int i = 0; i < 20; ++i)
+        {
+            correctAnswer.add(new DummyType(i));
+        }
+
+        printList(firstList);
+        if (!firstList.equals(correctAnswer))
+        {
+            printFailed();
+        }
+
+        System.out.println("clearing second list, " +
+                "adding 47 and merging with firstlist again");
+        secondList.clear();
+        secondList.add(new DummyType(47));
+        firstList.addAll(secondList);
+        correctAnswer.add(new DummyType(47));
+        printList(firstList);
+        if (!firstList.equals(correctAnswer))
+        {
+            printFailed("List doesn't match correct Answer." +
+                    " Correct answer is: " + correctAnswer.toString());
+            return;
+        }
+
+        printPassed();
+    }
+
+    private static void removeAllTest()
+    {
+        printTestName("removeAllTest:");
+
+        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+        CustomLinkedList<DummyType> correctAnswer = new CustomLinkedList<>();
+        for (int i = 0; i < 10; i++)
+        {
+            list.add(new DummyType(i));
+            correctAnswer.add(new DummyType(i));
+        }
+
+        CustomLinkedList<DummyType> anotherList = new CustomLinkedList<>();
+
+        anotherList.add(new DummyType(6));
+        anotherList.add(new DummyType(7));
+
+        System.out.println("Removing all elements from list that are equal to elements" +
+                "in anotherList.");
+        printList(list);
+        System.out.println("Another list = " + anotherList.toString());
+        boolean hasChanged = list.removeAll(anotherList);
+        System.out.println("result: list = " + list.toString());
+        System.out.println("List has changed contents: " + hasChanged);
+
+        correctAnswer.remove(new DummyType(6));
+        correctAnswer.remove(new DummyType(7));
+
+        if (!list.equals(correctAnswer))
+        {
+            printFailed("List doesn't match correct answer. " +
+                    "Correct answer is = " + correctAnswer.toString());
+            return;
+        }
+
+        if (!hasChanged)
+        {
+            printFailed("List did change " +
+                    "but result of the function doesn't indicate that.");
+            return;
+        }
+
+        System.out.println("Trying to remove non existent elements now:");
+        anotherList.clear();
+        anotherList.add(new DummyType(100));
+        anotherList.add(new DummyType(19));
+        printList(list);
+        System.out.println("Another list = " + anotherList.toString());
+
+        hasChanged = list.removeAll(anotherList);
+
+        System.out.println("result: list = " + list.toString());
+        System.out.println("List has changed contents: " + hasChanged);
+
+        if (!list.equals(correctAnswer))
+        {
+            printFailed("List doesn't match correct answer. " +
+                    "Correct answer is = " + correctAnswer.toString());
+            return;
+        }
+
+        if (hasChanged)
+        {
+            printFailed("List did not change " +
+                    "but result of the function says that it did.");
+            return;
+        }
+
+        printPassed();
+    }
+
+    private static void toArrayTest()
+    {
+        printTestName("toArray method test (no argument version):");
+
+        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+        for (int i = 0; i < 5; ++i)
+        {
+            list.add(new DummyType(i));
+        }
+
+        System.out.println("Outputting list.toArray() with 5 elements:");
+        printList(list);
+        Object[] array = list.toArray();
+
+        if (array.length != list.size())
+        {
+            printFailed("At least size of the array and list don't match");
+            return;
+        }
+
+        System.out.print("Array = [");
+        DummyType element = (DummyType) array[0];
+        System.out.print(element.toString());
+        for (int i = 1; i < array.length; ++i)
+        {
+            System.out.print(' ');
+            element = (DummyType) array[i];
+            if (!element.equals(list.get(i)))
+            {
+                printFailed("Element of list at " + i +
+                        " doesn't match wih the element in array at the same index");
+                return;
+            }
+            System.out.print(element.toString());
+        }
+        System.out.println(']');
+
+        printPassed();
     }
 
     public static void main(String[] args)
@@ -376,8 +515,9 @@ public class SimpleTest {
         iteratorTraversingTest();
         iteratorRemovalTest();
         containsTest();
-
-        //System.out.println(list.toString());
+        addAllTest();
+        removeAllTest();
+        toArrayTest();
     }
 
     private static void printList(CustomLinkedList<DummyType> list)

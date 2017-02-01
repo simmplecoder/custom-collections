@@ -1,9 +1,11 @@
 package custom.collections;
 
+import custom.linked_list_tests.DummyType;
+
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-public class CustomLinkedList<E>  implements Collection<E>{
+public class CustomLinkedList<E> implements Collection<E>{
     private class Node
     {
         private Node prev;
@@ -129,6 +131,13 @@ public class CustomLinkedList<E>  implements Collection<E>{
     }
 
 
+
+    @Override
+    public boolean retainAll(Collection<?> c)
+    {
+        return false;
+    }
+
     public E get(int index)
     {
         if (index < 0)
@@ -215,22 +224,23 @@ public class CustomLinkedList<E>  implements Collection<E>{
     @Override
     public <T> T[] toArray(T[] a)
     {
-        T[] result = a;
-
-        if (a.length < size)
-        {
-            result = new T[size];
-        }
-
-        Node current = root;
-        int index = 0;
-        while (current != null)
-        {
-            if (!(result[index] instanceof E))
-            {
-
-            }
-        }
+//        T[] result = a;
+//
+//        if (a.length < size)
+//        {
+//            result = new T[size];
+//        }
+//
+//        Node current = root;
+//        int index = 0;
+//        while (current != null)
+//        {
+//            if (!(result[index] instanceof E))
+//            {
+//
+//            }
+//        }
+        return a;
     }
 
     public boolean remove(Object o)
@@ -262,6 +272,22 @@ public class CustomLinkedList<E>  implements Collection<E>{
         }
 
         return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c)
+    {
+        java.util.Iterator<?> iterator = c.iterator();
+        boolean hasChanged = false;
+        while (iterator.hasNext())
+        {
+            if (remove(iterator.next()))
+            {
+                hasChanged = true;
+            }
+        }
+
+        return hasChanged;
     }
 
     public E remove(int index)
@@ -332,8 +358,6 @@ public class CustomLinkedList<E>  implements Collection<E>{
         root = null;
         size = 0;
     }
-
-
 
     @Override
     public java.util.Iterator<E> iterator()

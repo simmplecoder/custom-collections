@@ -40,17 +40,27 @@ Three function listed in the *Effective Java, Second Edition* were implemented, 
     
  - [x] `iterator()` method. Tests: <font color="blue">Not Required</font>
  
+ - [x] `addAll(Collection<? extends E> c)` method. Tests: <font color="green">passed</font>
+ 
+ - [x] `removeAll(Collection<?> c)` method. Tests: Tests: <font color="green">passed</font>
+ 
+ - [x] `containsAll(Collection<?> c)` method. Tests: <font color ="red">To be written</font>
+ 
+ - [ ] `retainAll(Collection<?> c)` method. Method does nothing for now.
+ 
+ - [x] `toArray()` method. Tests: <font color="green">passed</font>.
+ 
+ - [ ] `toArray(T[] a)`. Method is not implemented due to compilation errors.
+ 
 <h3><font color="purple">Iterator</font> interface implementation status: full</h3>
 
  - [x] `next()` method. Tests: <font color="green">passed</font>
  
  - [x] `hasNext()` method. Tests: <font color="green">passed</font>
  
- - [x] `remove()` method. Tests: <font color="red">To be written</font>
-
+ - [x] `remove()` method. Tests: <font color="yellow">shallow tests passed</font>
  
- <hr>   
-Most of the non `*All(Collection&lt? extends T&gt)` functions were implemented. Further progression will require major leap.
+ <hr>
  
 <h2>Testing methodology</h2>
 

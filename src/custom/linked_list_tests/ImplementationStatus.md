@@ -32,11 +32,35 @@ Three function listed in the *Effective Java, Second Edition* were implemented, 
     
  - [x] `remove(Object o)` method. Tests: <font color="green">passed</font>
  
+   <font color="yellow">Bugfix:</font> it was keeping the objects when doing reverse traversal of the list
+ 
  - [x] `size()` method. Tests: <font color="green">passed</font>
  
     Note: `size` field should be maintained by modifier functions.
     
-Most of the non `*All(Collection<? extends T>)` functions were implemented. Further progression will require major leap.
+ - [x] `iterator()` method. Tests: <font color="blue">Not Required</font>
+ 
+ - [x] `addAll(Collection<? extends E> c)` method. Tests: <font color="green">passed</font>
+ 
+ - [x] `removeAll(Collection<?> c)` method. Tests: Tests: <font color="green">passed</font>
+ 
+ - [x] `containsAll(Collection<?> c)` method. Tests: <font color ="red">To be written</font>
+ 
+ - [x] `retainAll(Collection<?> c)` method. Tests: Tests: <font color="green">passed</font>.
+ 
+ - [x] `toArray()` method. Tests: <font color="green">passed</font>.
+ 
+ - [x] `toArray(T[] a)`. Tests: Tests: <font color="green">passed</font>
+ 
+<h3><font color="purple">Iterator</font> interface implementation status: full</h3>
+
+ - [x] `next()` method. Tests: <font color="green">passed</font>
+ 
+ - [x] `hasNext()` method. Tests: <font color="green">passed</font>
+ 
+ - [x] `remove()` method. Tests: <font color="green">passed</font>
+ 
+ <hr>
  
 <h2>Testing methodology</h2>
 
@@ -44,7 +68,7 @@ Currently tests are oneshot small functions. Every test suite have been moved in
 
 <h3>Future plan</h3>
 
-Tests should be moved to a subclass of abstract class named `Test`. The abstract class should be rougly like the following:
+Tests should be moved to a subclass of abstract class named `Test`. The abstract class should be roughly like the following:
  
     abstract class Test
     {

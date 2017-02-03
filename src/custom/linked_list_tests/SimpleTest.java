@@ -1,9 +1,11 @@
 package custom.linked_list_tests;
 
-import custom.collections.CustomLinkedList;
+import custom.collections.LinkedList;
 import custom.utilities.ANSIIColors;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class SimpleTest {
     private static void printPassed()
@@ -33,7 +35,7 @@ public class SimpleTest {
     {
         printTestName("Item addition test:");
 
-        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+        LinkedList<DummyType> list = new LinkedList<>();
 
         System.out.println("Initially list is empty.");
         list.add(new DummyType(12));
@@ -46,7 +48,7 @@ public class SimpleTest {
     private static void getterTest()
     {
         printTestName("Item getting test:");
-        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+        LinkedList<DummyType> list = new LinkedList<>();
 
         for (int i = 0; i < 10; i++)
         {
@@ -72,7 +74,7 @@ public class SimpleTest {
     {
         printTestName("List size test:");
 
-        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+        LinkedList<DummyType> list = new LinkedList<>();
 
         final int initSize = 10;
         for (int i = 0; i < initSize; ++i)
@@ -115,8 +117,8 @@ public class SimpleTest {
     {
         printTestName("Lists equality test:");
 
-        CustomLinkedList<DummyType> firstList = new CustomLinkedList<>();
-        CustomLinkedList<DummyType> secondList = new CustomLinkedList<>();
+        LinkedList<DummyType> firstList = new LinkedList<>();
+        LinkedList<DummyType> secondList = new LinkedList<>();
 
         //try adding the same 10 items to both
         for (int i = 0; i < 10; ++i)
@@ -141,6 +143,12 @@ public class SimpleTest {
             printFailed("The lists compared to be equal, but in fact they are not");
         }
 
+        Integer dummyObject = 12;
+        if (firstList.equals(dummyObject))
+        {
+            printFailed("The list compared to be equal to integer");
+        }
+
         printPassed();
     }
 
@@ -148,8 +156,8 @@ public class SimpleTest {
     {
         printTestName("List hashcode test:");
 
-        CustomLinkedList<DummyType> firstList = new CustomLinkedList<>();
-        CustomLinkedList<DummyType> secondList = new CustomLinkedList<>();
+        LinkedList<DummyType> firstList = new LinkedList<>();
+        LinkedList<DummyType> secondList = new LinkedList<>();
 
         for (int i = 0; i < 10; ++i)
         {
@@ -191,7 +199,7 @@ public class SimpleTest {
     {
         printTestName("Item removal test:");
 
-        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+        LinkedList<DummyType> list = new LinkedList<>();
         for (int i = 0; i < 10; ++i)
         {
             list.add(new DummyType(i));
@@ -207,7 +215,7 @@ public class SimpleTest {
             System.out.println("Removing DummyType(" + i + "). List = " + list.toString());
         }
 
-        CustomLinkedList<DummyType> correctList = new CustomLinkedList<>();
+        LinkedList<DummyType> correctList = new LinkedList<>();
 
         for (int i = 1; i < 10; i += 2)
         {
@@ -229,7 +237,7 @@ public class SimpleTest {
     private static void containsTest()
     {
         printTestName("Contains test");
-        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+        LinkedList<DummyType> list = new LinkedList<>();
 
         for (int i = 0; i < 10; ++i)
         {
@@ -259,7 +267,7 @@ public class SimpleTest {
     private static void iteratorTraversingTest()
     {
         printTestName("Iterator traversing test");
-        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+        LinkedList<DummyType> list = new LinkedList<>();
 
         for (int i = 0; i < 10; ++i)
         {
@@ -303,7 +311,7 @@ public class SimpleTest {
     {
         printTestName("Iterator remove method test:");
 
-        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+        LinkedList<DummyType> list = new LinkedList<>();
 
         for (int i = 0; i < 10 ; ++i)
         {
@@ -345,8 +353,8 @@ public class SimpleTest {
     {
         printTestName("Add all test:");
 
-        CustomLinkedList<DummyType> firstList = new CustomLinkedList<>();
-        CustomLinkedList<DummyType> secondList = new CustomLinkedList<>();
+        LinkedList<DummyType> firstList = new LinkedList<>();
+        LinkedList<DummyType> secondList = new LinkedList<>();
 
         for (int i = 0; i < 10; ++i)
         {
@@ -360,7 +368,7 @@ public class SimpleTest {
         System.out.println("Merging lists into firstList:");
         firstList.addAll(secondList);
 
-        CustomLinkedList<DummyType> correctAnswer = new CustomLinkedList<>();
+        LinkedList<DummyType> correctAnswer = new LinkedList<>();
         for (int i = 0; i < 20; ++i)
         {
             correctAnswer.add(new DummyType(i));
@@ -393,15 +401,15 @@ public class SimpleTest {
     {
         printTestName("removeAllTest:");
 
-        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
-        CustomLinkedList<DummyType> correctAnswer = new CustomLinkedList<>();
+        LinkedList<DummyType> list = new LinkedList<>();
+        LinkedList<DummyType> correctAnswer = new LinkedList<>();
         for (int i = 0; i < 10; i++)
         {
             list.add(new DummyType(i));
             correctAnswer.add(new DummyType(i));
         }
 
-        CustomLinkedList<DummyType> anotherList = new CustomLinkedList<>();
+        LinkedList<DummyType> anotherList = new LinkedList<>();
 
         anotherList.add(new DummyType(6));
         anotherList.add(new DummyType(7));
@@ -464,7 +472,7 @@ public class SimpleTest {
     {
         printTestName("toArray method test (no argument version):");
 
-        CustomLinkedList<DummyType> list = new CustomLinkedList<>();
+        LinkedList<DummyType> list = new LinkedList<>();
         for (int i = 0; i < 5; ++i)
         {
             list.add(new DummyType(i));
@@ -500,6 +508,169 @@ public class SimpleTest {
         printPassed();
     }
 
+    private static void intBasedRemoveTest()
+    {
+        printTestName("int based remove test:");
+
+        LinkedList<Integer> list = new LinkedList<>();
+        LinkedList<Integer> correctAnswer = new LinkedList<>();
+
+        for (int i = 0; i < 10; ++i)
+        {
+            list.add(i);
+            correctAnswer.add(i);
+        }
+
+        printList(list);
+        System.out.println("Trying to remove element on index 3");
+        list.remove(3);
+        correctAnswer.remove(new Integer(3));
+        printList(list);
+
+        if (!list.equals(correctAnswer))
+        {
+            printFailed("It either didn't remove anything or removed incorrect one");
+            throw new RuntimeException();
+        }
+
+        printPassed();
+    }
+
+    private static void parametrizedtoArrayTest()
+    {
+        printTestName("Parametrized Array test:");
+
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        for (int i = 0; i < 1000; ++i)
+        {
+            System.out.println("Going on run " + i);
+            final int sizeLowerBound = 5;
+            final int sizeUpperBound = 5000;
+            final int arraySize = random.nextInt(sizeLowerBound, sizeUpperBound);
+
+            Integer[] correctAnswer = new Integer[arraySize];
+            LinkedList<Integer> list = new LinkedList<>();
+
+            for (int j = 0; j < arraySize; ++j)
+            {
+                final int valueLowerBound = 0;
+                final int valueUpperBound = 500;
+                Integer number = random.nextInt(valueLowerBound, valueUpperBound);
+                list.add(number);
+                correctAnswer[j] = number;
+            }
+
+            int resultArraySize = random.nextInt(sizeLowerBound, arraySize + 1);
+            Integer[] result = list.toArray(new Integer[resultArraySize]);
+
+            if (!Arrays.equals(result, correctAnswer))
+            {
+                printFailed("Resulting array and correct answer doesn't match");
+                throw new RuntimeException();
+            }
+        }
+
+        printPassed();
+    }
+
+    private static void retainAllTest()
+    {
+        printTestName("retainAll test:");
+
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        for (int i = 0; i < 1000; ++i)
+        {
+            System.out.println("Going on run " + (i + 1));
+
+            final int validValuesSizeLowerBound = 5;
+            final int validValuesSizeUpperBound = 500;
+            final int validValuesArraySize = random.nextInt(validValuesSizeLowerBound,
+                    validValuesSizeUpperBound);
+
+            //generate valid values
+            Integer[] validValuesArray = new Integer[validValuesArraySize];
+            for (int j = 0; j < validValuesArraySize; ++j)
+            {
+                final int validValuesLowerBound = 0;
+                final int validValuesUpperBound = 500;
+                validValuesArray[j] = random.nextInt(validValuesLowerBound, validValuesUpperBound);
+            }
+            Arrays.sort(validValuesArray);
+
+            final int arraySizeLowerBound = validValuesSizeLowerBound;
+            final int arraySizeUpperBound = 1000;
+            int arraySize = random.nextInt(arraySizeLowerBound, arraySizeUpperBound);
+            Integer[] correctAnswer = new Integer[arraySize];
+            LinkedList<Integer> list = new LinkedList<>();
+            int correctAnswerCount = 0;
+
+            for (int j = 0; j < arraySize; ++j)
+            {
+                final int valueLowerBound = 0;
+                final int valueUpperBound = 1000;
+                Integer number = random.nextInt(valueLowerBound, valueUpperBound);
+                list.add(number);
+                int index = Arrays.binarySearch(validValuesArray, number);
+                if (index >= 0)
+                {
+                    correctAnswer[correctAnswerCount++] = number;
+                }
+            }
+
+            //fill the rest of the correctAnswer
+            for (int j = correctAnswerCount; j < arraySize; ++j)
+            {
+                correctAnswer[j] = 0;
+            }
+
+            list.retainAll(Arrays.asList(validValuesArray));
+            Integer[] result = list.toArray(new Integer[0]);
+            Arrays.sort(result);
+            Arrays.sort(correctAnswer, 0, correctAnswerCount);
+            if (result.length != correctAnswerCount)
+            {
+                printFailed("List doesn't contain correct number of valid values");
+                throw new RuntimeException();
+            }
+
+            if (!Arrays.equals(result, 0, correctAnswerCount, correctAnswer, 0, correctAnswerCount))
+            {
+                printFailed("List has correct length but incorrect values in it");
+                throw new RuntimeException();
+            }
+        }
+        printPassed();
+    }
+
+    private static void containsAllTest()
+    {
+        printTestName("ContainsAll method test:");
+
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+
+        for (int i = 0; i < 100; ++i)
+        {
+
+        }
+    }
+
+    private static void hashCodeDummyTypeTest()
+    {
+        printTestName("testing hashcode of DummyType:");
+
+        int x = 0;
+        DummyType object = new DummyType(x);
+        if (object.hashCode() != x)
+        {
+            printFailed("DummyType hashcode not working correctly");
+            throw new RuntimeException();
+        }
+
+        printPassed();
+    }
+
     public static void main(String[] args)
     {
         adderTest();
@@ -518,9 +689,15 @@ public class SimpleTest {
         addAllTest();
         removeAllTest();
         toArrayTest();
+
+        intBasedRemoveTest();
+        parametrizedtoArrayTest();
+        retainAllTest();
+
+        hashCodeDummyTypeTest();
     }
 
-    private static void printList(CustomLinkedList<DummyType> list)
+    private static void printList(LinkedList<?> list)
     {
         System.out.println("list = " + list.toString());
     }

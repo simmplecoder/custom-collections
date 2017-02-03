@@ -46,11 +46,11 @@ Three function listed in the *Effective Java, Second Edition* were implemented, 
  
  - [x] `containsAll(Collection<?> c)` method. Tests: <font color ="red">To be written</font>
  
- - [ ] `retainAll(Collection<?> c)` method. Method does nothing for now.
+ - [x] `retainAll(Collection<?> c)` method. Tests: Tests: <font color="green">passed</font>.
  
  - [x] `toArray()` method. Tests: <font color="green">passed</font>.
  
- - [ ] `toArray(T[] a)`. Method is not implemented due to compilation errors.
+ - [x] `toArray(T[] a)`. Tests: Tests: <font color="green">passed</font>
  
 <h3><font color="purple">Iterator</font> interface implementation status: full</h3>
 
@@ -58,7 +58,7 @@ Three function listed in the *Effective Java, Second Edition* were implemented, 
  
  - [x] `hasNext()` method. Tests: <font color="green">passed</font>
  
- - [x] `remove()` method. Tests: <font color="yellow">shallow tests passed</font>
+ - [x] `remove()` method. Tests: <font color="green">passed</font>
  
  <hr>
  
@@ -68,7 +68,7 @@ Currently tests are oneshot small functions. Every test suite have been moved in
 
 <h3>Future plan</h3>
 
-Tests should be moved to a subclass of abstract class named `Test`. The abstract class should be rougly like the following:
+Tests should be moved to a subclass of abstract class named `Test`. The abstract class should be roughly like the following:
  
     abstract class Test
     {

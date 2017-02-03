@@ -1,11 +1,12 @@
 package custom.collections;
 
-import custom.linked_list_tests.DummyType;
+import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-public class CustomLinkedList<E> implements Collection<E>{
+public class LinkedList<E> implements Collection<E>{
     private class Node
     {
         private Node prev;
@@ -83,7 +84,7 @@ public class CustomLinkedList<E> implements Collection<E>{
                 throw new IllegalStateException();
             }
 
-            CustomLinkedList.this.remove(next);
+            LinkedList.this.remove(next);
             nextCalled = false;
         }
     }
@@ -135,7 +136,38 @@ public class CustomLinkedList<E> implements Collection<E>{
     @Override
     public boolean retainAll(Collection<?> c)
     {
-        return false;
+        if (c == null) {
+            return false;
+        }
+
+        boolean hasChanged = false;
+
+        Node current = root;
+
+        while (current != null)
+        {
+            java.util.Iterator<?> iterator = c.iterator();
+            boolean matchFound = false;
+            while (iterator.hasNext())
+            {
+                if (current.getValue().equals(iterator.next()))
+                {
+                    matchFound = true;
+                    break;
+                }
+            }
+            if (matchFound)
+            {
+                current = current.getNext();
+                continue;
+            }
+
+            remove(current);
+            hasChanged = true;
+            current = current.getNext();
+        }
+
+        return hasChanged;
     }
 
     public E get(int index)
@@ -205,6 +237,7 @@ public class CustomLinkedList<E> implements Collection<E>{
     }
 
     @Override
+    @NotNull
     public Object[] toArray()
     {
         Object[] result = new Object[size];
@@ -221,26 +254,46 @@ public class CustomLinkedList<E> implements Collection<E>{
         return result;
     }
 
+//    @SuppressWarnings("unchecked")
+//    private static <T> Class<? extends T> classOf(T obj) {
+//        return (Class<? extends T>) obj.getClass();
+//    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> Class<? extends T> classOf(T[] array) {
+        return (Class<? extends T>) array.getClass().getComponentType();
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T[] newArray(Class<T> clazz, int size) {
+        return (T[]) Array.newInstance(clazz, size);
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     public <T> T[] toArray(T[] a)
     {
-//        T[] result = a;
-//
-//        if (a.length < size)
-//        {
-//            result = new T[size];
-//        }
-//
-//        Node current = root;
-//        int index = 0;
-//        while (current != null)
-//        {
-//            if (!(result[index] instanceof E))
-//            {
-//
-//            }
-//        }
-        return a;
+        if (a == null)
+        {
+            throw new NullPointerException("Input array must not be null");
+        }
+
+        T[] result = a;
+        if (a.length < size)
+        {
+            result = newArray(classOf(a), size);
+        }
+
+        Node current = root;
+        int index = 0;
+        while (current != null)
+        {
+            result[index] = (T)current.getValue();
+            ++index;
+            current = current.getNext();
+        }
+
+        return result;
     }
 
     public boolean remove(Object o)
@@ -297,6 +350,11 @@ public class CustomLinkedList<E> implements Collection<E>{
             throw new IndexOutOfBoundsException();
         }
 
+        if (index == 0)
+        {
+            root = root.getNext();
+        }
+
         Node current = root;
         while (index > 0)
         {
@@ -309,10 +367,7 @@ public class CustomLinkedList<E> implements Collection<E>{
         {
             root = null;
         }
-        else if (index == 0)
-        {
-            root = root.getNext();
-        } else
+        else
         {
             current.getPrev().setNext(current.getNext());
 
@@ -324,6 +379,16 @@ public class CustomLinkedList<E> implements Collection<E>{
 
         --size;
         return result;
+    }
+
+    public E pop()
+    {
+        if (size == 0)
+        {
+            throw new IllegalStateException();
+        }
+
+        return remove(size - 1);
     }
 
     private void remove(Node node)
@@ -360,6 +425,7 @@ public class CustomLinkedList<E> implements Collection<E>{
     }
 
     @Override
+    @NotNull
     public java.util.Iterator<E> iterator()
     {
         return new Iterator(root);
@@ -413,14 +479,15 @@ public class CustomLinkedList<E> implements Collection<E>{
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public boolean equals(Object o)
     {
-        if (!(o instanceof CustomLinkedList))
+        if (!(o instanceof LinkedList))
         {
             return false;
         }
 
-        CustomLinkedList another = (CustomLinkedList)o;
+        LinkedList another = (LinkedList)o;
 
         if (size != another.size)
         {
@@ -428,6 +495,7 @@ public class CustomLinkedList<E> implements Collection<E>{
         }
 
         Node current = root;
+
         Node currentAnother = another.root;
 
         while (current != null && currentAnother != null)

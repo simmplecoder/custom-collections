@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SimpleTest {
     private static void printPassed()
     {
-        System.out.println(ANSIIColors.GREEN + "Test Passed!" + ANSIIColors.RESET);
+        System.out.println(ANSIIColors.green + "Test Passed!" + ANSIIColors.reset);
         System.out.println();
     }
 
@@ -21,14 +21,14 @@ public class SimpleTest {
 
     private static void printFailed(String description)
     {
-        System.out.println(ANSIIColors.RED + "Test Failed!" + ANSIIColors.RESET);
+        System.out.println(ANSIIColors.red + "Test Failed!" + ANSIIColors.reset);
         System.out.println(description);
         System.out.println();
     }
 
     private static void printTestName(String name)
     {
-        System.out.println(ANSIIColors.BLUE + name + ANSIIColors.RESET);
+        System.out.println(ANSIIColors.blue + name + ANSIIColors.reset);
     }
 
     private static void adderTest()
@@ -644,33 +644,6 @@ public class SimpleTest {
         printPassed();
     }
 
-    private static void containsAllTest()
-    {
-        printTestName("ContainsAll method test:");
-
-        ThreadLocalRandom random = ThreadLocalRandom.current();
-
-        for (int i = 0; i < 100; ++i)
-        {
-
-        }
-    }
-
-    private static void hashCodeDummyTypeTest()
-    {
-        printTestName("testing hashcode of DummyType:");
-
-        int x = 0;
-        DummyType object = new DummyType(x);
-        if (object.hashCode() != x)
-        {
-            printFailed("DummyType hashcode not working correctly");
-            throw new RuntimeException();
-        }
-
-        printPassed();
-    }
-
     public static void main(String[] args)
     {
         adderTest();
@@ -694,7 +667,15 @@ public class SimpleTest {
         parametrizedtoArrayTest();
         retainAllTest();
 
-        hashCodeDummyTypeTest();
+        SizeTest szTest = new SizeTest(100, "UnitTest based size test",
+                "The test uses new UnitTest class, which aims to improve test quality.");
+        try {
+            szTest.run();
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
     private static void printList(LinkedList<?> list)

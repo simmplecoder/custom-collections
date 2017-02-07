@@ -1,4 +1,4 @@
-#<font color="purple">CustomLinkedList</font> implementation status
+#<font color="purple">LinkedList</font> implementation status
 
 <h2>Features</h2>
 
@@ -64,42 +64,4 @@ Three function listed in the *Effective Java, Second Edition* were implemented, 
  
 <h2>Testing methodology</h2>
 
-Currently tests are oneshot small functions. Every test suite have been moved into their own functions. Every test now prints it's name with blue, result with green or red depending on pass or failure.
-
-<h3>Future plan</h3>
-
-Tests should be moved to a subclass of abstract class named `Test`. The abstract class should be roughly like the following:
- 
-    abstract class Test
-    {
-        public String getTestName() //default behavior
-        {
-            return "Anonymous test";
-        }
-        
-        public String getTestDescription() //default behavior
-        {
-            return "No description.";
-        }
-        
-        private abstract boolean execute();
-        
-        private void printResult(boolean result)
-        {
-            if (result)
-            {
-                //print "Test Passed!" in green
-                return;
-            }
-            
-            //print "Test Failed!" in red
-        }
-        
-        public void run()
-        {
-            //print test name in blue and description in default color
-            printResult(execute());
-        }
-        
-        //optionally make the result be queriable
-    }
+Documentation has moved to "UnitTest class.md" file.

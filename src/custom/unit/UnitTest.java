@@ -78,22 +78,16 @@ public abstract class UnitTest {
             {
                 runKernel();
             }
-            catch (TestFailed e)
-            {
-                printFailed(e.getMessage());
-                if (!getUserResponse(e.getMessage()))
-                {
-                    System.out.println("Aborting test ...");
-                    throw e;
-                }
-            }
             catch (Exception e)
             {
-                if (!getUserResponse("Unexpected exception is thrown."))
-                {
-                    System.out.println("Aborting test ...");
-                    throw e;
-                }
+                printFailed(e.getMessage());
+
+//                if (!getUserResponse("Unexpected exception is thrown."))
+//                {
+//                    System.out.println("Aborting test ...");
+//                    throw e;
+//                }
+                throw e;
             }
         }
 

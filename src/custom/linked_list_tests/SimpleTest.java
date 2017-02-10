@@ -669,8 +669,16 @@ public class SimpleTest {
 
         SizeTest szTest = new SizeTest(100, "UnitTest based size test",
                 "The test uses new UnitTest class, which aims to improve test quality.");
+
+        AddAtTest addAtTest = new AddAtTest(50);
+        RemoveAtTest removeAtTest = new RemoveAtTest(50);
+        IndexOfTest indexOfTest = new IndexOfTest(50);
+
         try {
             szTest.run();
+            addAtTest.run();
+            removeAtTest.run();
+            indexOfTest.run();
         }
         catch (Exception e)
         {

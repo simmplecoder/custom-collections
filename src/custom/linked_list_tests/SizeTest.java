@@ -54,7 +54,7 @@ public class SizeTest extends UnitTest {
             int currentSize = list.size();
             for (int i = currentSize; i > size; --i)
             {
-                list.pop();
+                list.remove(list.size() - 1);
             }
         }
 

@@ -10,7 +10,7 @@ public class LinkedListStack<E> {
 
     public E pop()
     {
-        E result = storage.pop();
+        E result = storage.remove(storage.size() - 1);
         return result;
     }
 

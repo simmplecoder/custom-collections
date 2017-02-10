@@ -52,6 +52,16 @@ Three function listed in the *Effective Java, Second Edition* were implemented, 
  
  - [x] `toArray(T[] a)`. Tests: Tests: <font color="green">passed</font>
  
+ <h3>List interface implementation status: </h3>
+ 
+ - [x] `add(int index, E element)` method. Tests: <font color="green">passed</font>.
+ 
+ - [x] `remove(int index)` method. Tests: <font color="green">passed</font>.
+ 
+ - [x] `indexOf(Object o)` method. Tests: <font color="green">passed</font>.
+ 
+ - [x] `lastIndexOf(Object o)` method. Tests: to be written
+ 
 <h3><font color="purple">Iterator</font> interface implementation status: full</h3>
 
  - [x] `next()` method. Tests: <font color="green">passed</font>
@@ -59,6 +69,10 @@ Three function listed in the *Effective Java, Second Edition* were implemented, 
  - [x] `hasNext()` method. Tests: <font color="green">passed</font>
  
  - [x] `remove()` method. Tests: <font color="green">passed</font>
+ 
+ <h3><font color="purple">ListIterator</font> implementation status: full</h3>
+ 
+ -[x] 
  
  <hr>
  

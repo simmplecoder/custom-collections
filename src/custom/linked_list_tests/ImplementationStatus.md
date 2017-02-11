@@ -44,7 +44,7 @@ Three function listed in the *Effective Java, Second Edition* were implemented, 
  
  - [x] `removeAll(Collection<?> c)` method. Tests: Tests: <font color="green">passed</font>
  
- - [x] `containsAll(Collection<?> c)` method. Tests: <font color ="red">To be written</font>
+ - [x] `containsAll(Collection<?> c)` method. Tests: <font color="green">passed</font>.
  
  - [x] `retainAll(Collection<?> c)` method. Tests: Tests: <font color="green">passed</font>.
  
@@ -60,7 +60,7 @@ Three function listed in the *Effective Java, Second Edition* were implemented, 
  
  - [x] `indexOf(Object o)` method. Tests: <font color="green">passed</font>.
  
- - [x] `lastIndexOf(Object o)` method. Tests: to be written
+ - [x] `lastIndexOf(Object o)` method. Tests: <font color="green">passed</font>  
  
 <h3><font color="purple">Iterator</font> interface implementation status: full</h3>
 

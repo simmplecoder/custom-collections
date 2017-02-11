@@ -31,9 +31,9 @@ public abstract class UnitTest {
     protected abstract void runKernel() throws TestFailed;
 
     private int runCount;
-    String testName;
-    String testDescription;
+    private String testName;
 
+    @Deprecated
     public UnitTest(int runCount, String testName, String testDescription)
     {
         if (runCount < 1)
@@ -43,8 +43,19 @@ public abstract class UnitTest {
 
         this.runCount = runCount;
         this.testName = testName;
-        this.testDescription = testDescription;
     }
+
+    public UnitTest(int runCount, String testName)
+    {
+        if (runCount < 1)
+        {
+            throw new IllegalArgumentException();
+        }
+
+        this.runCount = runCount;
+        this.testName = testName;
+    }
+
 
     public UnitTest(int runCount)
     {
@@ -69,7 +80,6 @@ public abstract class UnitTest {
     public void run() throws TestFailed
     {
         printTestName(testName);
-        printTestDescription(testDescription);
 
         for (int i = 0; i < runCount; ++i)
         {

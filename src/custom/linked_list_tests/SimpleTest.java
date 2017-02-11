@@ -673,12 +673,14 @@ public class SimpleTest {
         AddAtTest addAtTest = new AddAtTest(50);
         RemoveAtTest removeAtTest = new RemoveAtTest(50);
         IndexOfTest indexOfTest = new IndexOfTest(50);
+        LastIndexOfTest lastIndexOfTest = new LastIndexOfTest(50);
 
         try {
             szTest.run();
             addAtTest.run();
             removeAtTest.run();
             indexOfTest.run();
+            lastIndexOfTest.run();
         }
         catch (Exception e)
         {

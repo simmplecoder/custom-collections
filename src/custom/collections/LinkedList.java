@@ -1,6 +1,5 @@
 package custom.collections;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
@@ -364,68 +363,6 @@ public class LinkedList<E> implements List<E>{
         return true;
     }
 
-    @Contract("_, _, null -> fail")
-    private boolean addAllAt(Node previous, Node next, Collection<? extends E> c)
-    {
-        if (c == null)
-        {
-            throw new NullPointerException();
-        }
-
-        if (c.isEmpty())
-        {
-            return false;
-        }
-
-        int oldSize = size;
-        java.util.Iterator<? extends E> iterator = c.iterator();
-
-        if (previous == null && next == null) //empty list
-        {
-            root = new Node(null, iterator.next(), null);
-            previous = root;
-            ++size;
-            while (iterator.hasNext())
-            {
-                previous.setNext(new Node(previous, iterator.next(), null));
-                previous = previous.getNext();
-                ++size;
-            }
-        }
-        else if (previous != null && next == null) // at the end of the non empty list
-        {
-            while (iterator.hasNext())
-            {
-                previous.setNext(new Node(previous, iterator.next(), null));
-                previous = previous.getNext();
-                ++size;
-            }
-        }
-        else if (previous != null)
-        {
-            while (iterator.hasNext())
-            {
-                Node newNode = new Node(previous, iterator.next(), next);
-                previous.setNext(newNode);
-                next.setPrev(newNode);
-                previous = previous.getNext();
-                next = next.getNext();
-
-                ++size;
-            }
-        }
-        else //previous == null && next != null, at the beginning of the non empty list
-        {
-            while (iterator.hasNext())
-            {
-                next.setPrev(new Node(next.getPrev(), iterator.next(), next));
-                ++size;
-            }
-        }
-
-        return true;
-    }
-
     @Override
     public E set(int index, E element)
     {
@@ -734,6 +671,7 @@ public class LinkedList<E> implements List<E>{
         int index = 0;
         while (iterator.hasNext())
         {
+            //noinspection unchecked
             if (comp.compare(o, iterator.next()) == 0)
             {
                 return index;
@@ -764,6 +702,7 @@ public class LinkedList<E> implements List<E>{
         int index = 0;
         while (iterator.hasNext())
         {
+            //noinspection unchecked
             if (comp.compare(o, iterator.next()) == 0)
             {
                 lastIndex = index;
@@ -772,17 +711,6 @@ public class LinkedList<E> implements List<E>{
         }
 
         return lastIndex;
-    }
-
-    private class IndexOfResult
-    {
-        int index;
-        Node node;
-
-        IndexOfResult(int index, Node node) {
-            this.index = index;
-            this.node = node;
-        }
     }
 
     @Override
@@ -904,6 +832,7 @@ public class LinkedList<E> implements List<E>{
      */
     @NotNull
     @Override
+    @Deprecated
     public List<E> subList(int from, int to)
     {
         return null;

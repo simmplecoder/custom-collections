@@ -44,13 +44,23 @@ Three function listed in the *Effective Java, Second Edition* were implemented, 
  
  - [x] `removeAll(Collection<?> c)` method. Tests: Tests: <font color="green">passed</font>
  
- - [x] `containsAll(Collection<?> c)` method. Tests: <font color ="red">To be written</font>
+ - [x] `containsAll(Collection<?> c)` method. Tests: <font color="green">passed</font>.
  
  - [x] `retainAll(Collection<?> c)` method. Tests: Tests: <font color="green">passed</font>.
  
  - [x] `toArray()` method. Tests: <font color="green">passed</font>.
  
  - [x] `toArray(T[] a)`. Tests: Tests: <font color="green">passed</font>
+ 
+ <h3>List interface implementation status: </h3>
+ 
+ - [x] `add(int index, E element)` method. Tests: <font color="green">passed</font>.
+ 
+ - [x] `remove(int index)` method. Tests: <font color="green">passed</font>.
+ 
+ - [x] `indexOf(Object o)` method. Tests: <font color="green">passed</font>.
+ 
+ - [x] `lastIndexOf(Object o)` method. Tests: <font color="green">passed</font>  
  
 <h3><font color="purple">Iterator</font> interface implementation status: full</h3>
 
@@ -59,6 +69,10 @@ Three function listed in the *Effective Java, Second Edition* were implemented, 
  - [x] `hasNext()` method. Tests: <font color="green">passed</font>
  
  - [x] `remove()` method. Tests: <font color="green">passed</font>
+ 
+ <h3><font color="purple">ListIterator</font> implementation status: full</h3>
+ 
+ -[x] 
  
  <hr>
  

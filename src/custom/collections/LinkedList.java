@@ -4,9 +4,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
-public class LinkedList<E> implements Collection<E>{
+public class LinkedList<E> implements List<E>{
     private class Node
     {
         private Node prev;
@@ -44,15 +46,19 @@ public class LinkedList<E> implements Collection<E>{
         }
     }
 
-    private class Iterator implements java.util.Iterator<E>
+    private class Iterator implements java.util.ListIterator<E>
     {
         private Node next;
-        boolean nextCalled = false;
+        boolean moved = false;
+        private Node previous;
+        int index = 0;
 
         Iterator(Node root)
         {
             next = root;
-            nextCalled = true;
+            moved = true;
+            previous = null;
+            index = 0;
         }
 
         @Override
@@ -70,72 +76,307 @@ public class LinkedList<E> implements Collection<E>{
             }
 
             E result = next.getValue();
+            previous = next;
             next = next.getNext();
-            nextCalled = true;
+            moved = true;
+            ++index;
 
             return result;
         }
 
         @Override
+        public int nextIndex()
+        {
+            return index;
+        }
+
+        @Override
+        public boolean hasPrevious()
+        {
+            return previous == null;
+        }
+
+        @Override
+        public E previous()
+        {
+            if (!hasPrevious())
+            {
+                throw new NoSuchElementException();
+            }
+
+            E result = previous.getValue();
+            next = previous;
+            previous = previous.getPrev();
+            moved = true;
+            --index;
+            return result;
+        }
+
+        @Override
+        public int previousIndex()
+        {
+            return index - 1;
+        }
+
+        @Override
         public void remove()
         {
-            if (!nextCalled)
+            if (!moved)
             {
                 throw new IllegalStateException();
             }
 
             LinkedList.this.remove(next);
-            nextCalled = false;
+            moved = false;
+        }
+
+        @Override
+        public void set(E element)
+        {
+            if (!moved)
+            {
+                throw new IllegalStateException();
+            }
+
+            next.setValue(element);
+            moved = false;
+        }
+
+        @Override
+        public void add(E element)
+        {
+            LinkedList.this.addAtNode(next, element);
         }
     }
 
     private Node root;
-    private int size = 0;
+    private int size;
+
+    public LinkedList()
+    {
+        size = 0;
+    }
 
     @Override
-    public boolean add(E object)
+    public boolean add(E element)
     {
         if (root == null)
         {
-            root = new Node(null, object, null);
+            root = new Node(null, element, null);
             ++size;
             return true;
         }
 
-        Node current = root;
-        while (current.getNext() != null)
-        {
-            current = current.getNext();
-        }
-
-        current.setNext(new Node(current, object, null));
+        Node tail = getNodeAt(size - 1);
+        tail.setNext(new Node(tail, element, null));
 
         ++size;
         return true;
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> c)
+    public void add(int index, E element)
     {
-        if (c == null) {
-            throw new NullPointerException("Container must not be null");
-        }
-
-        java.util.Iterator<? extends E> iterator = c.iterator();
-
-        while (iterator.hasNext())
+        if (index < 0 || index > size)
         {
-            add(iterator.next());
+            throw new IndexOutOfBoundsException();
         }
 
-        return true;
+        if (root == null)
+        {
+            root = new Node(null, element, null);
+            ++size;
+            return;
+        }
+
+        if (index == 0)
+        {
+            root.setPrev(new Node(null, element, root));
+            root = root.getPrev();
+            ++size;
+            return;
+        }
+
+        if (index == size)
+        {
+            Node current = root;
+            while (current.getNext() != null)
+            {
+                current = current.getNext();
+            }
+
+            current.setNext(new Node(current, element, null));
+            ++size;
+            return;
+        }
+
+        Node current = root;
+        while (index > 0)
+        {
+            current = current.getNext();
+            --index;
+        }
+
+        Node newNode = new Node(current.getPrev(), element, current);
+        current.getPrev().setNext(newNode);
+        current.setPrev(newNode);
+        ++size;
+    }
+
+    private void addAtNode(Node position, E element)
+    {
+        Node newNode = new Node(position.getPrev(), element, position);
+
+        if (position.getPrev() != null)
+        {
+            position.getPrev().setNext(newNode);
+        }
+
+        position.setPrev(newNode);
+
+        if (position == root)
+        {
+            root = newNode;
+        }
+
+        ++size;
     }
 
 
 
     @Override
-    public boolean retainAll(Collection<?> c)
+    public boolean addAll(@NotNull Collection<? extends E> c)
     {
+        return addAll(size, c);
+    }
+
+    @Override
+    public boolean addAll(int index, @NotNull Collection<? extends E> c)
+    {
+        if (index < 0 || index > size)
+        {
+            throw new IndexOutOfBoundsException();
+        }
+
+        if (c.isEmpty())
+        {
+            return false;
+        }
+
+        int targetSize = size + c.size();
+
+        java.util.Iterator<? extends E> iterator = c.iterator();
+
+
+        if (root == null) {
+            root = new Node(null, iterator.next(), null);
+            Node previous;
+            previous = root;
+            ++size;
+            while (iterator.hasNext()) {
+                previous.setNext(new Node(previous, iterator.next(), null));
+                previous = previous.getNext();
+                ++size;
+            }
+
+            if (size != targetSize)
+            {
+                throw new InternalError("Incorrect number of elements were added");
+            }
+
+            return true;
+        }
+
+        if (index == 0)
+        {
+            root.setPrev(new Node(null, iterator.next(), root));
+            root = root.getPrev();
+
+            Node current = root;
+            while (iterator.hasNext())
+            {
+                Node newNode = new Node(current, iterator.next(), current.getNext());
+                if (current.getNext() != null)
+                {
+                    current.getNext().setPrev(newNode);
+                }
+
+                current.setNext(newNode);
+                current = current.getNext();
+                ++size;
+            }
+            if (size != targetSize)
+            {
+                throw new InternalError("Incorrect number of elements were added");
+            }
+
+            return true;
+        }
+
+        if (index == size)
+        {
+            Node current = root;
+            while (current.getNext() != null)
+            {
+                current = current.getNext();
+            }
+
+            while (iterator.hasNext())
+            {
+                current.setNext(new Node(current, iterator.next(), null));
+                current = current.getNext();
+                ++size;
+            }
+
+            if (size != targetSize)
+            {
+                throw new InternalError("Incorrect number of elements were added");
+            }
+
+            return true;
+        }
+
+        Node current = root;
+        while (index > 0)
+        {
+            if (current.getNext() == null)
+            {
+                throw new InternalError("index exceeds size, but container doesn't know about that");
+            }
+
+            current = current.getNext();
+        }
+
+        while (iterator.hasNext())
+        {
+            Node newNode = new Node(current.getPrev(), iterator.next(), current.getNext());
+            current.getPrev().setNext(newNode);
+            current.setPrev(newNode);
+            ++size;
+        }
+
+        if (size != targetSize)
+        {
+            throw new InternalError("Incorrect number of elements were added");
+        }
+
+        return true;
+    }
+
+    @Override
+    public E set(int index, E element)
+    {
+        Node position = getNodeAt(index);
+        E result = position.getValue();
+        position.setValue(element);
+
+        return result;
+    }
+
+    @Override
+    public boolean retainAll(@NotNull Collection<?> c)
+    {
+        //noinspection ConstantConditions
         if (c == null) {
             return false;
         }
@@ -170,26 +411,30 @@ public class LinkedList<E> implements Collection<E>{
         return hasChanged;
     }
 
+    @Override
     public E get(int index)
     {
-        if (index < 0)
+        Node current = getNodeAt(index);
+
+        return current.getValue();
+    }
+
+    private Node getNodeAt(int index)
+    {
+        if (index < 0 || index >= size)
         {
             throw new IndexOutOfBoundsException();
         }
 
         Node current = root;
-        while (index > 0 && current.getNext() != null)
+
+        while (index > 0)
         {
             current = current.getNext();
-            index--;
+            --index;
         }
 
-        if (index != 0)
-        {
-            throw new IndexOutOfBoundsException();
-        }
-
-        return current.getValue();
+        return current;
     }
 
     @Override
@@ -210,19 +455,16 @@ public class LinkedList<E> implements Collection<E>{
     }
 
     @Override
-    public boolean containsAll(Collection<?> c)
+    public boolean containsAll(@NotNull Collection<?> c)
     {
+        //noinspection ConstantConditions
         if (c == null)
         {
             throw new NullPointerException();
         }
 
-        java.util.Iterator<?> iterator = c.iterator();
-
-        while (iterator.hasNext())
-        {
-            if (!contains(iterator.next()))
-            {
+        for (Object aC : c) {
+            if (!contains(aC)) {
                 return false;
             }
         }
@@ -236,8 +478,8 @@ public class LinkedList<E> implements Collection<E>{
         return size == 0;
     }
 
-    @Override
     @NotNull
+    @Override
     public Object[] toArray()
     {
         Object[] result = new Object[size];
@@ -254,11 +496,6 @@ public class LinkedList<E> implements Collection<E>{
         return result;
     }
 
-//    @SuppressWarnings("unchecked")
-//    private static <T> Class<? extends T> classOf(T obj) {
-//        return (Class<? extends T>) obj.getClass();
-//    }
-
     @SuppressWarnings("unchecked")
     private static <T> Class<? extends T> classOf(T[] array) {
         return (Class<? extends T>) array.getClass().getComponentType();
@@ -269,10 +506,12 @@ public class LinkedList<E> implements Collection<E>{
         return (T[]) Array.newInstance(clazz, size);
     }
 
+    @NotNull
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] toArray(T[] a)
+    public <T> T[] toArray(@NotNull T[] a)
     {
+        //noinspection ConstantConditions
         if (a == null)
         {
             throw new NullPointerException("Input array must not be null");
@@ -296,6 +535,7 @@ public class LinkedList<E> implements Collection<E>{
         return result;
     }
 
+    @Override
     public boolean remove(Object o)
     {
         Node current = root;
@@ -328,8 +568,14 @@ public class LinkedList<E> implements Collection<E>{
     }
 
     @Override
-    public boolean removeAll(Collection<?> c)
+    public boolean removeAll(@NotNull Collection<?> c)
     {
+        //noinspection ConstantConditions
+        if (c == null)
+        {
+            throw new NullPointerException();
+        }
+
         java.util.Iterator<?> iterator = c.iterator();
         boolean hasChanged = false;
         while (iterator.hasNext())
@@ -343,60 +589,17 @@ public class LinkedList<E> implements Collection<E>{
         return hasChanged;
     }
 
+    @Override
     public E remove(int index)
     {
-        if (index >= size || size < 0)
-        {
-            throw new IndexOutOfBoundsException();
-        }
+        Node current = getNodeAt(index);
 
-        if (index == 0)
-        {
-            root = root.getNext();
-        }
-
-        Node current = root;
-        while (index > 0)
-        {
-            current = current.getNext();
-            --index;
-        }
-
-        E result = current.getValue();
-        if (size == 1)
-        {
-            root = null;
-        }
-        else
-        {
-            current.getPrev().setNext(current.getNext());
-
-            if (current.getNext() != null)
-            {
-                current.getNext().setPrev(current.getPrev());
-            }
-        }
-
-        --size;
-        return result;
+        return remove(current);
     }
 
-    public E pop()
+    private E remove(Node node)
     {
-        if (size == 0)
-        {
-            throw new IllegalStateException();
-        }
-
-        return remove(size - 1);
-    }
-
-    private void remove(Node node)
-    {
-        if (node == null)
-        {
-            throw new NullPointerException();
-        }
+        E result = node.getValue();
 
         if (node == root) //at the beginning of the list
         {
@@ -416,8 +619,101 @@ public class LinkedList<E> implements Collection<E>{
         }
 
         --size;
+        return result;
     }
 
+    private Comparator getComparator(Object o)
+    {
+        Comparator comp;
+
+        if (o == null)
+        {
+            //noinspection ComparatorMethodParameterNotUsed
+            comp = (o1, t1) -> {
+                if (t1 == null)
+                {
+                    return 0;
+                }
+                else {
+                    return 1;
+                }
+            };
+        }
+        else
+        {
+            comp = (o12, t1) -> {
+                if (o12.equals(t1))
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 1;
+                }
+            };
+        }
+
+        return comp;
+    }
+
+    @Override
+    public int indexOf(Object o)
+    {
+        if (size == 0)
+        {
+            throw new IllegalStateException();
+        }
+
+        Comparator comp = getComparator(o);
+
+        java.util.Iterator<E> iterator = iterator();
+
+        int index = 0;
+        while (iterator.hasNext())
+        {
+            //noinspection unchecked
+            if (comp.compare(o, iterator.next()) == 0)
+            {
+                return index;
+            }
+
+            ++index;
+        }
+
+        return - 1;
+    }
+
+
+
+    @Override
+    public int lastIndexOf(Object o)
+    {
+        if (size == 0)
+        {
+            throw new IllegalStateException();
+        }
+
+        Comparator comp = getComparator(o);
+
+        int lastIndex = -1;
+
+        java.util.Iterator<E> iterator = iterator();
+
+        int index = 0;
+        while (iterator.hasNext())
+        {
+            //noinspection unchecked
+            if (comp.compare(o, iterator.next()) == 0)
+            {
+                lastIndex = index;
+            }
+            ++index;
+        }
+
+        return lastIndex;
+    }
+
+    @Override
     public void clear()
     {
         root = null;
@@ -431,6 +727,21 @@ public class LinkedList<E> implements Collection<E>{
         return new Iterator(root);
     }
 
+    @NotNull
+    @Override
+    public java.util.ListIterator<E> listIterator()
+    {
+        return new Iterator(root);
+    }
+
+    @NotNull
+    @Override
+    public java.util.ListIterator<E> listIterator(int index)
+    {
+        return new Iterator(getNodeAt(index));
+    }
+
+    @Override
     public int size()
     {
         return size;
@@ -511,5 +822,19 @@ public class LinkedList<E> implements Collection<E>{
         }
 
         return true;
+    }
+
+    /**
+     *  BROKEN! DO NOT USE!
+     * @param from index from which (inclusive) the sublist should start
+     * @param to index until which (exclusive) sublist should long
+     * @return sublist with range from get(from) to get(to)
+     */
+    @NotNull
+    @Override
+    @Deprecated
+    public List<E> subList(int from, int to)
+    {
+        return null;
     }
 }

@@ -1,11 +1,9 @@
 package custom.linked_list_tests;
 
-/**
- * Created by olzhas on 1/25/17.
- */
 public class DummyType {
     private int x;
 
+    /** @noinspection WeakerAccess*/
     public DummyType(int number)
     {
         x = number;

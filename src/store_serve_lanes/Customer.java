@@ -1,10 +1,8 @@
-package StoreServeLanes;
+package store_serve_lanes;
 
 import custom.collections.LinkedList;
-import custom.collections.LinkedListQueue;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 public class Customer {
     private String name;

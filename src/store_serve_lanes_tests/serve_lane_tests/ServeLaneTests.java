@@ -1,7 +1,7 @@
-package StoreServeLanesTests.ServeLaneTests;
+package store_serve_lanes_tests.serve_lane_tests;
 
-import StoreServeLanes.Customer;
-import StoreServeLanes.ServeLane;
+import store_serve_lanes.Customer;
+import store_serve_lanes.ServeLane;
 
 public class ServeLaneTests {
     public static void main(String[] args)
@@ -21,13 +21,24 @@ public class ServeLaneTests {
         lane.addCustomer(zack);
 
         try {
-            Thread.sleep(25000);
+            Thread.sleep(15000);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        lane.terminateLane();
+        Customer peter = new Customer("Peter");
+        peter.pickupItem("sauce");
+        peter.pickupItem("fish");
+        peter.pickupItem("bread");
+        lane.addCustomer(peter);
+
+        try {
+            Thread.sleep(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        lane.terminate();
         System.out.println("Test finished");
     }
 }

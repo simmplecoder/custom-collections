@@ -1,6 +1,6 @@
-package StoreServeLanesTests.CustomerTests;
+package store_serve_lanes_tests.customer_tests;
 
-import StoreServeLanes.Customer;
+import store_serve_lanes.Customer;
 
 public class CustomerTests {
 

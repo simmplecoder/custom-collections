@@ -14,21 +14,47 @@ public class ConsoleInterface {
 
     public ConsoleInterface()
     {
-        System.out.println("Starting user interface ...");
+        System.out.println("System startup");
+        System.out.println("Starting a server ...");
         try {
             socket = new ServerSocket(11987);
-            System.out.println("Waiting for client machine to connect ...");
-            Socket inSocket = socket.accept();
-            remoteIn = new Scanner(inSocket.getInputStream());
-            System.out.println("Connection successful");
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Creating a socket failed. Aborting program ...");
             System.exit(-1);
         }
+        System.out.println("Done");
 
+        Socket serveLaneConsoleSockets[] = new Socket[3];
+        for (int i = 0; i < 3; ++i)
+        {
+            System.out.println("Waiting for serve lane consoles to connect. " + i + " connected.");
+            try {
+                serveLaneConsoleSockets[i] = socket.accept();
+            } catch (IOException e) {
+                System.out.println("Couldn't connect to serve lane consoles. Cannot recover, crashing ...");
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        }
+        System.out.println("All serve lane consoles connected.");
         System.out.println("Initializing Serve lanes ...");
-        lanes = new StoreServeLanes();
+        lanes = new StoreServeLanes(serveLaneConsoleSockets);
+        System.out.println("Done");
+
+        System.out.println("Starting user interface ...");
+        System.out.println("Waiting for client machine to connect ...");
+        try {
+            Socket inSocket = socket.accept(); //the client is responsible for closing the connection
+            remoteIn = new Scanner(inSocket.getInputStream());
+        } catch (IOException e) {
+            System.out.println("Couldn't connect to client machine. Aborting ...");
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+        System.out.println("Connection successful");
+
         System.out.println("Ready!");
         keepRunning = true;
     }

@@ -36,7 +36,8 @@ public class LaneConsole {
         System.out.println(text);
     }
 
-    private void start()
+    /** @noinspection WeakerAccess*/
+    public void start()
     {
         while (keepRunning)
         {
@@ -46,9 +47,9 @@ public class LaneConsole {
         try {
             socket.close();
         } catch (IOException e) {
-            System.out.println("Problems terminating connection with host. Crashing ...");
+            System.out.println("Problems terminating connection with host. " +
+                    "Nothing bad, ignoring and proceeding");
             e.printStackTrace();
-            System.exit(-1);
         }
     }
 

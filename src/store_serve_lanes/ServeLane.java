@@ -1,6 +1,10 @@
 package store_serve_lanes;
 
 import custom.collections.LinkedListQueue;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.Collection;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -9,8 +13,9 @@ public class ServeLane {
     private LinkedListQueue<Customer> customers;
     private AtomicBoolean keepRunning;
     private Semaphore semaphore;
-    private int laneID;
     private Thread worker;
+    private Socket socket;
+    private PrintWriter remoteOut;
 
     private class ServeByOne implements Runnable
     {
@@ -43,13 +48,19 @@ public class ServeLane {
         }
     }
 
-    public ServeLane(int laneID)
-    {
+    public ServeLane(Socket s) throws IOException {
+        socket = s;
+        try {
+            remoteOut = new PrintWriter(s.getOutputStream(), true);
+        } catch (IOException e) {
+            System.out.println("Creating output stream from socket failed. Rethrowing ...");
+            e.printStackTrace();
+            throw e;
+        }
         customers = new LinkedListQueue<>();
         //serveStatus = new ScheduledThreadPoolExecutor(1);
         keepRunning = new AtomicBoolean(true);
         semaphore = new Semaphore(1);
-        this.laneID = laneID;
         worker = new Thread(new ServeByOne());
     }
 
@@ -71,12 +82,12 @@ public class ServeLane {
 
     private void serveCustomer(Customer customer)
     {
-        System.out.println("Lane " + laneID + " started serving customer " + customer.getName());
+        remoteOut.println("Serving customer " + customer.getName());
         Collection<String> items = customer.dropItemsToLine();
 
         for (String item : items)
         {
-            System.out.println("Scanning " + item + " ...");
+            remoteOut.println("Scanning " + item + " ...");
             try {
                 Thread.sleep(3000); //sleep for 3 secs
             } catch (InterruptedException e) {
@@ -84,11 +95,20 @@ public class ServeLane {
             }
         }
 
-        System.out.println("Scanning completed. We hope to see you again, " + customer.getName() + "!");
+        remoteOut.println("Scanning completed. We hope to see you again, " + customer.getName() + "!");
     }
 
     public void terminate()
     {
         keepRunning.set(false);
+
+        try {
+            worker.join();
+        } catch (InterruptedException e) {
+            //nothing too bad, proceed
+            e.printStackTrace();
+        }
+        remoteOut.println("time to sleep"); //serve lane console is responsible for cleaning up
+        remoteOut.close();
     }
 }

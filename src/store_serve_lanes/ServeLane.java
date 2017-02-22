@@ -2,15 +2,11 @@ package store_serve_lanes;
 
 import custom.collections.LinkedListQueue;
 import java.util.Collection;
-//import java.util.Timer;
-//import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
-//import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ServeLane {
     private LinkedListQueue<Customer> customers;
-    //private ScheduledThreadPoolExecutor serveStatus;
     private AtomicBoolean keepRunning;
     private Semaphore semaphore;
     private int laneID;
@@ -39,7 +35,7 @@ public class ServeLane {
                 }
 
                 try {
-                    Thread.sleep(2000); //sleep for two seconds to avoid thermal throttling
+                    Thread.sleep(1000); //sleep for a second to avoid thermal throttling
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -82,7 +78,7 @@ public class ServeLane {
         {
             System.out.println("Scanning " + item + " ...");
             try {
-                Thread.sleep(5000); //sleep for 5 secs
+                Thread.sleep(3000); //sleep for 3 secs
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

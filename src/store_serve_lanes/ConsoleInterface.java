@@ -1,70 +1,77 @@
 package store_serve_lanes;
 
-import custom.collections.LinkedList;
-
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ConsoleInterface {
     private StoreServeLanes lanes;
-    private Scanner scanner;
     private boolean keepRunning;
+    private ServerSocket socket;
+    private Scanner remoteIn;
 
     public ConsoleInterface()
     {
         System.out.println("Starting user interface ...");
-        scanner = new Scanner(System.in);
+        try {
+            socket = new ServerSocket(11987);
+            System.out.println("Waiting for client machine to connect ...");
+            Socket inSocket = socket.accept();
+            remoteIn = new Scanner(inSocket.getInputStream());
+            System.out.println("Connection successful");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Creating a socket failed. Aborting program ...");
+            System.exit(-1);
+        }
+
         System.out.println("Initializing Serve lanes ...");
         lanes = new StoreServeLanes();
         System.out.println("Ready!");
         keepRunning = true;
     }
 
-    private void guideCustomer()
+    private void receiveCustomer()
     {
-        System.out.println("Welcome to North Island store!");
-        System.out.print("Please enter your name: ");
-        String customerName = scanner.nextLine();
+        try {
+            String customerName = remoteIn.nextLine();
+            if (customerName.toLowerCase().equals("time to sleep")) {
+                keepRunning = false;
+                return;
+            }
 
-        if (customerName.toLowerCase().equals("time to sleep"))
+            Customer customer = new Customer(customerName);
+            String buffer = remoteIn.nextLine();
+            while (!buffer.toLowerCase().equals("done")) {
+                customer.pickupItem(buffer);
+                buffer = remoteIn.nextLine();
+            }
+
+            int laneNumber = Integer.parseInt(remoteIn.nextLine());
+            lanes.assignCustomerToLane(customer, laneNumber);
+        } catch (NoSuchElementException e)
         {
-            keepRunning = false;
-            return;
+            System.out.println("Client machine has suddenly disconnected. Please investigate. Aborting the program");
+            System.exit(-1);
         }
-
-        LinkedList<String> items = new LinkedList<>();
-        System.out.println("Please type the names of items you wish to pick up. " +
-                "Type done when you're ready to go to service lane");
-        String buffer = scanner.nextLine();
-
-        while (!buffer.equals("done"))
-        {
-            items.add(buffer);
-            buffer = scanner.nextLine();
-        }
-
-        System.out.println("To which lane would you want to join? [1-3]");
-        int laneNumber = scanner.nextInt();
-        while (laneNumber < 1 || laneNumber > 3)
-        {
-            System.out.println("Incorrect lane number. Try again");
-            laneNumber = scanner.nextInt();
-        }
-
-        Customer customer = new Customer(customerName);
-
-        for (String productName: items)
-        {
-            customer.pickupItem(productName);
-        }
-
-        lanes.assignCustomerToLane(customer, laneNumber);
     }
 
-    public void exec()
+    public void start()
     {
         while (keepRunning)
         {
-            guideCustomer();
+            receiveCustomer();
         }
+        remoteIn.close();
+        try {
+            socket.close();
+        } catch (IOException e) {
+            System.out.println("Experiencing issues with closing the socket. Crashing ...");
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        lanes.terminateAllLines();
     }
 }

@@ -20,7 +20,7 @@ public class StoreServeLanes {
             throw new IllegalArgumentException("There are only 3 lanes number 1 2 3");
         }
 
-        lanes[laneNumber].addCustomer(customer);
+        lanes[laneNumber - 1].addCustomer(customer);
     }
 
     public void terminateAllLines()

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class LinkedList<E> implements List<E>{
-    private class Node
+    class Node
     {
         private Node prev;
         private E value;
@@ -221,7 +221,7 @@ public class LinkedList<E> implements List<E>{
         ++size;
     }
 
-    private void addAtNode(Node position, E element)
+    void addAtNode(Node position, E element)
     {
         Node newNode = new Node(position.getPrev(), element, position);
 
@@ -240,7 +240,10 @@ public class LinkedList<E> implements List<E>{
         ++size;
     }
 
-
+    Node getRoot()
+    {
+        return root;
+    }
 
     @Override
     public boolean addAll(Collection<? extends E> c)

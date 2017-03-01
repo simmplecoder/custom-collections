@@ -1,7 +1,5 @@
 package custom.collections;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Comparator;
@@ -9,7 +7,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 public class LinkedList<E> implements List<E>{
-    private class Node
+    class Node
     {
         private Node prev;
         private E value;
@@ -223,7 +221,7 @@ public class LinkedList<E> implements List<E>{
         ++size;
     }
 
-    private void addAtNode(Node position, E element)
+    void addAtNode(Node position, E element)
     {
         Node newNode = new Node(position.getPrev(), element, position);
 
@@ -242,16 +240,19 @@ public class LinkedList<E> implements List<E>{
         ++size;
     }
 
-
+    Node getRoot()
+    {
+        return root;
+    }
 
     @Override
-    public boolean addAll(@NotNull Collection<? extends E> c)
+    public boolean addAll(Collection<? extends E> c)
     {
         return addAll(size, c);
     }
 
     @Override
-    public boolean addAll(int index, @NotNull Collection<? extends E> c)
+    public boolean addAll(int index, Collection<? extends E> c)
     {
         if (index < 0 || index > size)
         {
@@ -374,7 +375,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
-    public boolean retainAll(@NotNull Collection<?> c)
+    public boolean retainAll( Collection<?> c)
     {
         //noinspection ConstantConditions
         if (c == null) {
@@ -455,7 +456,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
-    public boolean containsAll(@NotNull Collection<?> c)
+    public boolean containsAll(Collection<?> c)
     {
         //noinspection ConstantConditions
         if (c == null)
@@ -478,7 +479,6 @@ public class LinkedList<E> implements List<E>{
         return size == 0;
     }
 
-    @NotNull
     @Override
     public Object[] toArray()
     {
@@ -506,10 +506,9 @@ public class LinkedList<E> implements List<E>{
         return (T[]) Array.newInstance(clazz, size);
     }
 
-    @NotNull
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] toArray(@NotNull T[] a)
+    public <T> T[] toArray(T[] a)
     {
         //noinspection ConstantConditions
         if (a == null)
@@ -568,7 +567,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
-    public boolean removeAll(@NotNull Collection<?> c)
+    public boolean removeAll(Collection<?> c)
     {
         //noinspection ConstantConditions
         if (c == null)
@@ -721,20 +720,17 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
-    @NotNull
     public java.util.Iterator<E> iterator()
     {
         return new Iterator(root);
     }
 
-    @NotNull
     @Override
     public java.util.ListIterator<E> listIterator()
     {
         return new Iterator(root);
     }
 
-    @NotNull
     @Override
     public java.util.ListIterator<E> listIterator(int index)
     {
@@ -830,7 +826,6 @@ public class LinkedList<E> implements List<E>{
      * @param to index until which (exclusive) sublist should long
      * @return sublist with range from get(from) to get(to)
      */
-    @NotNull
     @Override
     @Deprecated
     public List<E> subList(int from, int to)

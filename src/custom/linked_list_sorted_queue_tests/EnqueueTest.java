@@ -26,18 +26,19 @@ public class EnqueueTest extends UnitTest {
         {
             final int valueLowerBound = 0;
             final int valueUpperBound = 100;
-            sortedQueue.enqueue(random.nextInt(valueLowerBound, valueUpperBound));
+            sortedQueue.insert(random.nextInt(valueLowerBound, valueUpperBound));
         }
 
-        Integer prev = sortedQueue.dequeue();
+        Integer prev = sortedQueue.pop();
         Integer current;
         while (sortedQueue.isEmpty())
         {
-            current = sortedQueue.dequeue();
+            current = sortedQueue.pop();
             if (prev.compareTo(current) >= 0)
             {
                 throw new TestFailed("queue is not sorted");
             }
+            prev = current;
         }
     }
 }

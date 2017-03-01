@@ -10,7 +10,7 @@ public class LinkedListSortedQueue<E extends Comparable> {
         storage = new LinkedList<>();
     }
 
-    public boolean enqueue(E element)
+    public boolean insert(E element)
     {
         if (element == null)
         {
@@ -45,7 +45,7 @@ public class LinkedListSortedQueue<E extends Comparable> {
         return true;
     }
 
-    public E dequeue()
+    public E pop()
     {
         return storage.remove(0);
     }

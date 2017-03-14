@@ -36,21 +36,6 @@ public class BinaryTree<E> {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        buildString(this, builder);
-        return builder.toString();
-    }
-
-    private void buildString(BinaryTree<E> node, StringBuilder builder)
-    {
-        if (node == null)
-        {
-            return;
-        }
-
-        buildString(node.getLeftChild(), builder);
-        builder.append(node.getValue().toString());
-        builder.append('\n');
-        buildString(node.getRightChild(), builder);
+        return value.toString();
     }
 }

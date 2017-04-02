@@ -1,6 +1,6 @@
 package custom.trees;
 
-public class BinarySearchTree<E extends Comparable> {
+public class BinarySearchTree<E extends Comparable<E>> {
     private BinaryTree<E> root;
     private int size;
 
@@ -119,11 +119,12 @@ public class BinarySearchTree<E extends Comparable> {
             --size;
             return true;
         }
-
+        //every other case already returned until now
         BinaryTree<E> successor = getLeftMostChild(current.getRightChild());
         current.setValue(successor.getValue());
+
         BinaryTree<E> successorsParent = current.getRightChild();
-        while (successorsParent.getLeftChild() != successor) {
+        while (successorsParent.getLeftChild() != null && successorsParent.getLeftChild() != successor) {
             successorsParent = successorsParent.getLeftChild();
         }
 
@@ -150,12 +151,13 @@ public class BinarySearchTree<E extends Comparable> {
 
     private BinaryTree<E> getLeftMostChild(BinaryTree<E> current)
     {
+        BinaryTree<E> leftMostChild = current;
         while (current.getLeftChild() != null)
         {
-            current = current.getLeftChild();
+            leftMostChild = leftMostChild.getLeftChild();
         }
 
-        return current;
+        return leftMostChild;
     }
 
     public int size()

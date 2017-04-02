@@ -9,8 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SizeTest extends UnitTest {
     private ThreadLocalRandom random;
 
-    public SizeTest(int runCount, String testName, String testDescription)
-    {
+    public SizeTest(int runCount, String testName, String testDescription) {
         super(runCount, testName, testDescription);
         random = ThreadLocalRandom.current();
     }
@@ -20,8 +19,7 @@ public class SizeTest extends UnitTest {
         random = ThreadLocalRandom.current();
     }
 
-    protected void runKernel() throws TestFailed
-    {
+    protected void runKernel() throws TestFailed {
         final int sizeLowerBound = 5;
         final int sizeUpperBound = 10000;
 
@@ -29,37 +27,29 @@ public class SizeTest extends UnitTest {
 
         int size = random.nextInt(sizeLowerBound, sizeUpperBound);
 
-        for (int i = 0; i < size; ++i)
-        {
+        for (int i = 0; i < size; ++i) {
             list.add(0);
         }
 
-        if (list.size() != size)
-        {
+        if (list.size() != size) {
             throw new TestFailed("size() doesn't return the actual size.");
         }
 
         //get new size
         size = random.nextInt(sizeLowerBound, sizeUpperBound);
-        if (size > list.size())
-        {
+        if (size > list.size()) {
             int currentSize = list.size();
-            for (int i = currentSize; i < size; ++i)
-            {
+            for (int i = currentSize; i < size; ++i) {
                 list.add(0);
             }
-        }
-        else
-        {
+        } else {
             int currentSize = list.size();
-            for (int i = currentSize; i > size; --i)
-            {
+            for (int i = currentSize; i > size; --i) {
                 list.remove(list.size() - 1);
             }
         }
 
-        if (list.size() != size)
-        {
+        if (list.size() != size) {
             throw new TestFailed("size() didn't return correct number after modifications.");
         }
     }

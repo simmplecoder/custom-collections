@@ -9,9 +9,10 @@ public class LaneConsole {
     private Scanner remoteIn;
     private boolean keepRunning;
 
-    /** @noinspection WeakerAccess*/
-    public LaneConsole()
-    {
+    /**
+     * @noinspection WeakerAccess
+     */
+    public LaneConsole() {
         String hostName = "localhost";
         int portNumber = 11987;
         try {
@@ -24,11 +25,14 @@ public class LaneConsole {
         keepRunning = true;
     }
 
-    private void listen()
-    {
+    public static void main(String[] args) {
+        LaneConsole console = new LaneConsole();
+        console.start();
+    }
+
+    private void listen() {
         String text = remoteIn.nextLine();
-        if (text.toLowerCase().equals("time to sleep"))
-        {
+        if (text.toLowerCase().equals("time to sleep")) {
             keepRunning = false;
             return;
         }
@@ -36,11 +40,11 @@ public class LaneConsole {
         System.out.println(text);
     }
 
-    /** @noinspection WeakerAccess*/
-    public void start()
-    {
-        while (keepRunning)
-        {
+    /**
+     * @noinspection WeakerAccess
+     */
+    public void start() {
+        while (keepRunning) {
             listen();
         }
         remoteIn.close();
@@ -51,11 +55,5 @@ public class LaneConsole {
                     "Nothing bad, ignoring and proceeding");
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args)
-    {
-        LaneConsole console = new LaneConsole();
-        console.start();
     }
 }

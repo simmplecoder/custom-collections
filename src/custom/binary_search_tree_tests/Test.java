@@ -75,5 +75,9 @@ public class Test {
         System.out.println("tree: " + tree.toString());
         System.out.println("tree size: " + tree.size());
         System.out.println();
+
+        System.out.println("starting randomized tests...");
+        RemoveTest rmTest = new RemoveTest(10000);
+        rmTest.run();
     }
 }

@@ -1,35 +1,43 @@
 package custom.collections;
 
-public class LinkedListQueue<E> {
-    private LinkedList<E> storage;
+import java.util.List;
 
-    public LinkedListQueue()
-    {
-        storage = new LinkedList<E>();
+public class LinkedListQueue<E> implements Queue<E> {
+    private List<E> storage;
+
+    public LinkedListQueue() {
+        storage = new LinkedList<>();
     }
 
-    public void enqueue(E element)
-    {
+    public LinkedListQueue(List<E> internalList) {
+        if (internalList == null) {
+            throw new IllegalArgumentException("null list is not allowed");
+        }
+        storage = internalList;
+    }
+
+    @Override
+    public void enqueue(E element) {
         storage.add(element); //appends
     }
 
-    public E dequeue()
-    {
+    @Override
+    public E dequeue() {
         return storage.remove(0);
     }
 
-    public int size()
-    {
+    @Override
+    public int size() {
         return storage.size();
     }
 
-    public void clear()
-    {
+    @Override
+    public void clear() {
         storage.clear();
     }
 
-    public boolean isEmpty()
-    {
+    @Override
+    public boolean isEmpty() {
         return storage.isEmpty();
     }
 }

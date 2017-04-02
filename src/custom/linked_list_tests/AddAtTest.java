@@ -6,18 +6,16 @@ import custom.unit.TestFailed;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class AddAtTest extends LinkedListTest{
+public class AddAtTest extends LinkedListTest {
     private ThreadLocalRandom random;
 
-    public AddAtTest(int runCount)
-    {
+    public AddAtTest(int runCount) {
         super(runCount, "add(int index, E element) method test", "");
         random = ThreadLocalRandom.current();
     }
 
     @Override
-    protected void runKernel() throws TestFailed
-    {
+    protected void runKernel() throws TestFailed {
         int size = random.nextInt(sizeLowerBound, sizeUpperBound);
 
         Integer[] correctAnswer = generateArray(size);
@@ -32,13 +30,11 @@ public class AddAtTest extends LinkedListTest{
 
         list.addAll(Arrays.asList(correctAnswer).subList(rangeTail + 1, size));
 
-        for (int i = rangeHead; i <= rangeTail; ++i)
-        {
+        for (int i = rangeHead; i <= rangeTail; ++i) {
             list.add(i, correctAnswer[i]);
         }
 
-        if (!Arrays.equals(list.toArray(new Integer[0]), correctAnswer))
-        {
+        if (!Arrays.equals(list.toArray(new Integer[0]), correctAnswer)) {
             throw new TestFailed("Either list didn't add elements correctly or array is messed up");
         }
 

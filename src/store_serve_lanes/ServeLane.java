@@ -17,37 +17,6 @@ public class ServeLane {
     private Socket socket;
     private PrintWriter remoteOut;
 
-    private class ServeByOne implements Runnable
-    {
-        @Override
-        public void run()
-        {
-            while (keepRunning.get())
-            {
-                Customer customer = null;
-                try {
-                    semaphore.acquire();
-                    if (!customers.isEmpty()) {
-                        customer = customers.dequeue();
-                    }
-                    semaphore.release();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (customer != null)
-                {
-                    serveCustomer(customer);
-                }
-
-                try {
-                    Thread.sleep(1000); //sleep for a second to avoid thermal throttling
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     public ServeLane(Socket s) throws IOException {
         socket = s;
         try {
@@ -64,8 +33,7 @@ public class ServeLane {
         worker = new Thread(new ServeByOne());
     }
 
-    public void addCustomer(Customer customer)
-    {
+    public void addCustomer(Customer customer) {
         try {
             semaphore.acquire();
             customers.enqueue(customer);
@@ -75,18 +43,15 @@ public class ServeLane {
         }
     }
 
-    public void start()
-    {
+    public void start() {
         worker.start();
     }
 
-    private void serveCustomer(Customer customer)
-    {
+    private void serveCustomer(Customer customer) {
         remoteOut.println("Serving customer " + customer.getName());
         Collection<String> items = customer.dropItemsToLine();
 
-        for (String item : items)
-        {
+        for (String item : items) {
             remoteOut.println("Scanning " + item + " ...");
             try {
                 Thread.sleep(3000); //sleep for 3 secs
@@ -98,8 +63,7 @@ public class ServeLane {
         remoteOut.println("Scanning completed. We hope to see you again, " + customer.getName() + "!");
     }
 
-    public void terminate()
-    {
+    public void terminate() {
         keepRunning.set(false);
 
         try {
@@ -110,5 +74,32 @@ public class ServeLane {
         }
         remoteOut.println("time to sleep"); //serve lane console is responsible for cleaning up
         remoteOut.close();
+    }
+
+    private class ServeByOne implements Runnable {
+        @Override
+        public void run() {
+            while (keepRunning.get()) {
+                Customer customer = null;
+                try {
+                    semaphore.acquire();
+                    if (!customers.isEmpty()) {
+                        customer = customers.dequeue();
+                    }
+                    semaphore.release();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (customer != null) {
+                    serveCustomer(customer);
+                }
+
+                try {
+                    Thread.sleep(1000); //sleep for a second to avoid thermal throttling
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

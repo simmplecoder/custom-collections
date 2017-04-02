@@ -16,21 +16,17 @@ public class IndexOfTest extends LinkedListTest {
         random = ThreadLocalRandom.current();
     }
 
-    private void generateRandomizedCollection(Collection<Integer> c, int size)
-    {
-        for (int i = 0; i < size; ++i)
-        {
+    private void generateRandomizedCollection(Collection<Integer> c, int size) {
+        for (int i = 0; i < size; ++i) {
             c.add(random.nextInt(0, 20));
         }
     }
 
-    private void checkListsEquality(LinkedList<Integer> lhs, ArrayList<Integer> rhs)
-    {
+    private void checkListsEquality(LinkedList<Integer> lhs, ArrayList<Integer> rhs) {
         Integer[] correctArray = rhs.toArray(new Integer[0]);
         Integer[] array = lhs.toArray(new Integer[0]);
 
-        if (!Arrays.equals(correctArray, array))
-        {
+        if (!Arrays.equals(correctArray, array)) {
             throw new TestFailed("Lists wasn't generated to be equal.");
         }
     }
@@ -52,14 +48,12 @@ public class IndexOfTest extends LinkedListTest {
         final int sampleCountUpperBound = 500;
         int sampleCount = random.nextInt(sampleCountLowerBound, sampleCountUpperBound);
 
-        for (int i = 0; i < sampleCount; ++i)
-        {
+        for (int i = 0; i < sampleCount; ++i) {
             int number = random.nextInt(0, size); //since range of values i [0, size] by generateXXX function
             int correctIndex = correctAnswer.indexOf(number);
             int returnedIndex = list.indexOf(number);
 
-            if (correctIndex != returnedIndex)
-            {
+            if (correctIndex != returnedIndex) {
                 throw new TestFailed("Indexes returned from correctAnswer and list don't match");
             }
         }

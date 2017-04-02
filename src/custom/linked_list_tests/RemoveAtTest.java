@@ -26,8 +26,7 @@ public class RemoveAtTest extends LinkedListTest {
 
         int removalCount = random.nextInt(sizeLowerBound - 1, size);
 
-        for (int i = 0; i < removalCount; ++i)
-        {
+        for (int i = 0; i < removalCount; ++i) {
             int currentSize = correctAnswer.size();
             int nextToRemoveIndex = random.nextInt(0, currentSize);
 
@@ -35,16 +34,14 @@ public class RemoveAtTest extends LinkedListTest {
             correctAnswer.remove(nextToRemoveIndex);
         }
 
-        if (correctAnswer.size() != list.size())
-        {
+        if (correctAnswer.size() != list.size()) {
             throw new TestFailed("Lists don't have equal size.");
         }
 
         Integer[] correctAnswerArray = correctAnswer.toArray(new Integer[0]);
         Integer[] listArray = list.toArray(new Integer[0]);
 
-        if (!Arrays.equals(correctAnswerArray, listArray))
-        {
+        if (!Arrays.equals(correctAnswerArray, listArray)) {
             throw new TestFailed("lists don't match with contents.");
         }
     }

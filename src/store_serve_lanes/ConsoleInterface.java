@@ -12,8 +12,7 @@ public class ConsoleInterface {
     private ServerSocket socket;
     private Scanner remoteIn;
 
-    public ConsoleInterface()
-    {
+    public ConsoleInterface() {
         System.out.println("System startup");
         System.out.println("Starting a server ...");
         try {
@@ -26,8 +25,7 @@ public class ConsoleInterface {
         System.out.println("Done");
 
         Socket serveLaneConsoleSockets[] = new Socket[3];
-        for (int i = 0; i < 3; ++i)
-        {
+        for (int i = 0; i < 3; ++i) {
             System.out.println("Waiting for serve lane consoles to connect. " + i + " connected.");
             try {
                 serveLaneConsoleSockets[i] = socket.accept();
@@ -59,8 +57,7 @@ public class ConsoleInterface {
         keepRunning = true;
     }
 
-    private void receiveCustomer()
-    {
+    private void receiveCustomer() {
         try {
             String customerName = remoteIn.nextLine();
             if (customerName.toLowerCase().equals("time to sleep")) {
@@ -77,17 +74,14 @@ public class ConsoleInterface {
 
             int laneNumber = Integer.parseInt(remoteIn.nextLine());
             lanes.assignCustomerToLane(customer, laneNumber);
-        } catch (NoSuchElementException e)
-        {
+        } catch (NoSuchElementException e) {
             System.out.println("Client machine has suddenly disconnected. Please investigate. Aborting the program");
             System.exit(-1);
         }
     }
 
-    public void start()
-    {
-        while (keepRunning)
-        {
+    public void start() {
+        while (keepRunning) {
             receiveCustomer();
         }
         remoteIn.close();

@@ -22,20 +22,17 @@ public class EnqueueTest extends UnitTest {
         int size = random.nextInt(sizeLowerBound, sizeUpperBound);
         LinkedListSortedQueue<Integer> sortedQueue = new LinkedListSortedQueue<>();
 
-        for (int i = 0; i < size; ++i)
-        {
+        for (int i = 0; i < size; ++i) {
             final int valueLowerBound = 0;
             final int valueUpperBound = 100;
             sortedQueue.insert(random.nextInt(valueLowerBound, valueUpperBound));
         }
 
-        Integer prev = sortedQueue.pop();
+        Integer prev = sortedQueue.dequeue();
         Integer current;
-        while (sortedQueue.isEmpty())
-        {
-            current = sortedQueue.pop();
-            if (prev.compareTo(current) >= 0)
-            {
+        while (sortedQueue.isEmpty()) {
+            current = sortedQueue.dequeue();
+            if (prev.compareTo(current) >= 0) {
                 throw new TestFailed("queue is not sorted");
             }
             prev = current;

@@ -17,27 +17,22 @@ public abstract class LinkedListTest extends UnitTest {
         super(runCount);
     }
 
-    protected Collection<Integer> generateCollection(Collection<Integer> c, int size)
-    {
-        for (int i = 0; i < size; ++i)
-        {
+    protected Collection<Integer> generateCollection(Collection<Integer> c, int size) {
+        for (int i = 0; i < size; ++i) {
             c.add(i);
         }
 
         return c;
     }
 
-    protected LinkedList<Integer> generateLinkedList(int size)
-    {
-        if (size < 0)
-        {
+    protected LinkedList<Integer> generateLinkedList(int size) {
+        if (size < 0) {
             throw new IllegalArgumentException("size cannot be negative");
         }
 
         LinkedList<Integer> list = new LinkedList<>();
 
-        for (int i = 0; i < size; ++i)
-        {
+        for (int i = 0; i < size; ++i) {
             list.add(i);
         }
 
@@ -59,8 +54,7 @@ public abstract class LinkedListTest extends UnitTest {
     }
 
 
-    protected <E> void printList(String prefixText, LinkedList<E> list, String postFix)
-    {
+    protected <E> void printList(String prefixText, LinkedList<E> list, String postFix) {
         System.out.println(prefixText + list.toString() + postFix);
     }
 }

@@ -16,21 +16,17 @@ public class LastIndexOfTest extends LinkedListTest {
         random = ThreadLocalRandom.current();
     }
 
-    private void generateRandomizedCollection(Collection<Integer> c, int size)
-    {
-        for (int i = 0; i < size; ++i)
-        {
+    private void generateRandomizedCollection(Collection<Integer> c, int size) {
+        for (int i = 0; i < size; ++i) {
             c.add(random.nextInt(0, 20));
         }
     }
 
-    private void checkEquality(Collection<Integer> lhs, Collection<Integer> rhs)
-    {
+    private void checkEquality(Collection<Integer> lhs, Collection<Integer> rhs) {
         Integer[] correctArray = lhs.toArray(new Integer[0]);
         Integer[] array = rhs.toArray(new Integer[0]);
 
-        if (!Arrays.equals(correctArray, array))
-        {
+        if (!Arrays.equals(correctArray, array)) {
             throw new TestFailed("Contents of list and correctAnswer don't match.");
         }
     }
@@ -45,13 +41,11 @@ public class LastIndexOfTest extends LinkedListTest {
         list.addAll(correctAnswer);
 
         final int runCount = random.nextInt(50, 1000);
-        for (int i = 0; i < runCount; ++i)
-        {
+        for (int i = 0; i < runCount; ++i) {
             final int number = random.nextInt(0, 20);
             int correctIndex = correctAnswer.lastIndexOf(number);
             int index = list.lastIndexOf(number);
-            if (correctIndex != index)
-            {
+            if (correctIndex != index) {
                 throw new TestFailed("lastIndexOf(Object o) of list and correctAnswer doesn't match.");
             }
         }

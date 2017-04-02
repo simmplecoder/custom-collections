@@ -4,8 +4,7 @@ import custom.trees.BinaryTree;
 
 public class Test {
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         BinaryTree<Integer> root = new BinaryTree<>(0);
 
         root.setLeftChild(new BinaryTree<>(1));

@@ -1,43 +1,35 @@
 package custom.collections;
 
-import java.util.ListIterator;
-
-public class LinkedListSortedQueue<E extends Comparable> {
+public class LinkedListSortedQueue<E extends Comparable> implements SortedQueue<E> {
     private LinkedList<E> storage;
 
-    public LinkedListSortedQueue()
-    {
+    public LinkedListSortedQueue() {
         storage = new LinkedList<>();
     }
 
-    public boolean insert(E element)
-    {
-        if (element == null)
-        {
+    public boolean insert(E element) {
+        if (element == null) {
             throw new IllegalArgumentException();
         }
 
         LinkedList.Node current = storage.getRoot();
-        if (current == null)
-        {
-            storage.add(element);
-        }
-
-        int index = 0;
-        while (current != null && element.compareTo(current.getValue()) > 0)
-        {
-            current = current.getNext();
-            ++index;
-        }
-
-        if (current == null)
-        {
+        if (current == null) {
             storage.add(element);
             return true;
         }
 
-        if (element.compareTo(current.getValue()) == 0)
-        {
+        int index = 0;
+        while (current != null && element.compareTo(current.getValue()) > 0) {
+            current = current.getNext();
+            ++index;
+        }
+
+        if (current == null) {
+            storage.add(element);
+            return true;
+        }
+
+        if (element.compareTo(current.getValue()) == 0) {
             return false;
         }
 
@@ -45,18 +37,29 @@ public class LinkedListSortedQueue<E extends Comparable> {
         return true;
     }
 
-    public E pop()
-    {
+    public E dequeue() {
         return storage.remove(0);
     }
 
-    public int size()
-    {
+    public E get(int index) {
+        return storage.get(index);
+    }
+
+    public int size() {
         return storage.size();
     }
 
-    public boolean isEmpty()
-    {
+    @Override
+    public void clear() {
+        storage.clear();
+    }
+
+    public boolean isEmpty() {
         return storage.isEmpty();
+    }
+
+    @Override
+    public String toString() {
+        return storage.toString();
     }
 }

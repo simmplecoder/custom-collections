@@ -3,8 +3,7 @@ package custom.collections;
 public class LinkedListDequeue<E> implements Deque<E> {
     private LinkedList<E> storage;
 
-    public LinkedListDequeue()
-    {
+    public LinkedListDequeue() {
         storage = new LinkedList<E>();
     }
 

@@ -1,44 +1,46 @@
 package custom.collections;
 
-public class LinkedListStack<E> {
+public class LinkedListStack<E> implements Stack<E> {
     private LinkedList<E> storage;
 
-    public void push(E object)
+    public LinkedListStack()
     {
+        storage = new LinkedList<>();
+    }
+
+    @Override
+    public void push(E object) {
         storage.add(object);
     }
 
-    public E pop()
-    {
+    @Override
+    public E pop() {
         E result = storage.remove(storage.size() - 1);
         return result;
     }
 
-    public int size()
-    {
+    @Override
+    public int size() {
         return storage.size();
     }
 
-    public void clear()
-    {
+    @Override
+    public void clear() {
         storage.clear();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return storage.toString();
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return storage.hashCode();
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         return storage.equals(o);
     }
 }

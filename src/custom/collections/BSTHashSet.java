@@ -1,23 +1,24 @@
 package custom.collections;
 
-public class LLHashSet<E> implements Set<E>, HashTableStats{
-    private LinkedList<E>[] buckets;
+import custom.trees.BinarySearchTree;
+
+public class BSTHashSet<E extends Comparable<E>> implements Set<E>, HashTableStats {
+    private BinarySearchTree<E>[] buckets;
     private int size;
 
     @SuppressWarnings("unchecked")
-    public LLHashSet(int bucketCount)
+    public BSTHashSet(int bucketCount)
     {
         if (bucketCount <= 0)
         {
             throw new IllegalArgumentException("bucketCount cannot be zero");
         }
 
-//        buckets = (LinkedList<E>[]) new Object[bucketCount];
-        buckets = new LinkedList[bucketCount];
+        buckets = new BinarySearchTree[bucketCount];
         size = 0;
         for (int i = 0; i < buckets.length; ++i)
         {
-            buckets[i] = new LinkedList<>();
+            buckets[i] = new BinarySearchTree<>();
         }
     }
 
@@ -35,7 +36,7 @@ public class LLHashSet<E> implements Set<E>, HashTableStats{
             return false;
         }
 
-        buckets[bucketIndex].add(0, element);
+        buckets[bucketIndex].add(element);
         ++size;
 
         return true;
@@ -57,7 +58,7 @@ public class LLHashSet<E> implements Set<E>, HashTableStats{
     @SuppressWarnings("unchecked")
     @Override
     public void clear() {
-        buckets = (LinkedList<E>[]) new Object[buckets.length];
+        buckets = (BinarySearchTree<E>[]) new Object[buckets.length];
     }
 
     @Override
@@ -67,18 +68,20 @@ public class LLHashSet<E> implements Set<E>, HashTableStats{
 
     @Override
     public boolean contains(E value) {
-//        for (LinkedList<E> bucket : buckets) {
+//        for (BinarySearchTree<E> bucket : buckets) {
 //            if (bucket.contains(value)) {
 //                return true;
 //            }
 //        }
+//
+//        return false;
         int hashCode = value.hashCode() % buckets.length;
         return buckets[hashCode].contains(value);
     }
 
     public double getLoadFactor()
     {
-        return (double)size / buckets.length;
+        return size / buckets.length;
     }
 
     public double getBucketSizeStandardDev()
@@ -112,6 +115,6 @@ public class LLHashSet<E> implements Set<E>, HashTableStats{
             throw new IllegalStateException("trying to call removeAny() on empty set");
         }
 
-        return buckets[counter].remove(0);
+        return buckets[counter].removeAny();
     }
 }

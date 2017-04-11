@@ -40,4 +40,10 @@ public class LinkedListQueue<E> implements Queue<E> {
     public boolean isEmpty() {
         return storage.isEmpty();
     }
+
+    @Override
+    public String toString()
+    {
+        return storage.toString();
+    }
 }

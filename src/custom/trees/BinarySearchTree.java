@@ -139,14 +139,21 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     }
 
-    public void removeAny()
+    public boolean isEmpty()
+    {
+        return size == 0;
+    }
+
+    public E removeAny()
     {
         if (size == 0)
         {
             throw new IllegalStateException("Calling removeAny on empty tree");
         }
 
-        remove(getLeftMostChild(root).getValue());
+        E value = getLeftMostChild(root).getValue();
+        remove(value);
+        return value;
     }
 
     private BinaryTree<E> getLeftMostChild(BinaryTree<E> current)

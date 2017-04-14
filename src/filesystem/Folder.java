@@ -61,20 +61,20 @@ public class Folder extends FolderOrDocument {
         return true;
     }
 
-    boolean removeEntry(String name) {
+    boolean removeEntry(String name, boolean isFolder) {
         for (FolderOrDocument node : contents) {
-            if (node.getName().equals(name)) {
-                if (node.isFolder()) {
-                    if (((Folder) node).isEmpty()) {
-                        contents.remove(node);
-                        return true;
-                    }
+            if (node.getName().equals(name))
+            {
+                boolean isFile = !isFolder && !node.isFolder();
+                boolean isRealFolder = isFolder && node.isFolder(); // !isFile is not equivalent
+                boolean isEmptyFolder = isRealFolder && ((Folder)node).isEmpty();
 
-                    return false;
+                if (isEmptyFolder || isFile)
+                {
+                    contents.remove(node);
+                    return true;
                 }
-
-                contents.remove(node);
-                return true;
+                return false;
             }
         }
 
@@ -133,7 +133,7 @@ public class Folder extends FolderOrDocument {
     }
 
     private boolean isEmpty() {
-        return contents.size() == 0;
+        return contents.isEmpty();
     }
 
 
@@ -183,6 +183,12 @@ public class Folder extends FolderOrDocument {
             }
         }
 
+    }
+
+    @Override
+    public String toString()
+    {
+        return getName();
     }
 
 }

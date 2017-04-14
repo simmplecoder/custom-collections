@@ -9,7 +9,7 @@ public class Command {
      */
     public static final int MAKE_FOLDER = 1;
     public static final int MAKE_DOCUMENT = 2;
-    public static final int REMOVE_EMPTY_FODLER = 3;
+    public static final int REMOVE_EMPTY_FOLDER = 3;
     public static final int REMOVE_DOCUMENT = 4;
     public static final int GO_UP_ONE_FOLDER = 5;
     public static final int GO_INTO_FOLDER = 6;
@@ -93,7 +93,7 @@ public class Command {
     private boolean needsName(int cmdCode) {
         return (cmdCode == Command.MAKE_FOLDER) ||
                 (cmdCode == Command.MAKE_DOCUMENT) ||
-                (cmdCode == Command.REMOVE_EMPTY_FODLER) ||
+                (cmdCode == Command.REMOVE_EMPTY_FOLDER) ||
                 (cmdCode == Command.REMOVE_DOCUMENT) ||
                 (cmdCode == Command.GO_INTO_FOLDER);
     }

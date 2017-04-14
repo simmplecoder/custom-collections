@@ -1,6 +1,7 @@
 package filesystem_tests;
 
 import custom.collections.Queue;
+import custom.utilities.ANSIIColors;
 import filesystem.*;
 
 public class FSSTester {
@@ -28,6 +29,7 @@ public class FSSTester {
 		fss.undoLastCommand();
 		fss.listContents();
 
+		//test #1
 		check(expected0);
 
 		for (int i = 1; i <= 5; i++) {
@@ -35,15 +37,17 @@ public class FSSTester {
 		}
 		fss.listContents();
 
+		//test #2
 		check(expected1);
 
 		fss.doCommand(new Command(Command.MAKE_FOLDER, "folder1"));
 		fss.doCommand(new Command(Command.GO_INTO_FOLDER, "folder1"));
 		fss.doCommand(new Command(Command.MAKE_DOCUMENT, "insidefile"));
-		fss.doCommand(new Command(Command.REMOVE_EMPTY_FODLER, "insidefile"));
-		fss.doCommand(new Command(Command.REMOVE_EMPTY_FODLER, "mysteryfolder"));
+		fss.doCommand(new Command(Command.REMOVE_EMPTY_FOLDER, "insidefile"));
+		fss.doCommand(new Command(Command.REMOVE_EMPTY_FOLDER, "mysteryfolder"));
 		fss.listContents();
 
+		//test #3
 		check(expected2);
 
 		fss.doCommand(new Command(Command.GO_INTO_FOLDER, "insidefile"));
@@ -51,6 +55,7 @@ public class FSSTester {
 		fss.doCommand(new Command(Command.MAKE_DOCUMENT, "insidefile2"));
 		fss.listContents();
 
+		//test #4
 		check(expected3);
 
 		fss.doCommand(new Command(Command.MAKE_FOLDER, "folder1"));
@@ -58,6 +63,7 @@ public class FSSTester {
 		fss.doCommand(new Command(Command.MAKE_DOCUMENT, "insidefile3"));
 		fss.listContents();
 
+		//test #5
 		check(expected4);
 
 		fss.doCommand(new Command(Command.GO_UP_ONE_FOLDER));
@@ -66,6 +72,7 @@ public class FSSTester {
 		fss.doCommand(new Command(Command.GO_UP_ONE_FOLDER));
 		fss.listContents();
 
+		//test #6
 		check(expected5);
 
 		fss.undoLastCommand();
@@ -74,12 +81,14 @@ public class FSSTester {
 		fss.doCommand(new Command(Command.MAKE_DOCUMENT, "upper"));
 		fss.listContents();
 
+		//test #7
 		check(expected6);
 
 		fss.doCommand(new Command(Command.GO_UP_ONE_FOLDER));
-		fss.doCommand(new Command(Command.REMOVE_EMPTY_FODLER, "folder1"));
+		fss.doCommand(new Command(Command.REMOVE_EMPTY_FOLDER, "folder1"));
 		fss.listContents();
 
+		//test #8
 		check(expected6);
 
 		fss.doCommand(new Command(Command.GO_INTO_FOLDER, "folder1"));
@@ -90,11 +99,13 @@ public class FSSTester {
 		fss.doCommand(new Command(Command.REMOVE_DOCUMENT, "folder1"));
 		fss.listContents();
 
+		//test #9
 		check(expected7);
 
-		fss.doCommand(new Command(Command.REMOVE_EMPTY_FODLER, "folder1"));
+		fss.doCommand(new Command(Command.REMOVE_EMPTY_FOLDER, "folder1"));
 		fss.listContents();
 
+		//test #10
 		check(expected8);
 
 		fss.undoLastCommand();
@@ -104,6 +115,7 @@ public class FSSTester {
 		fss.undoLastCommand();
 		fss.listContents();
 
+		//test #11
 		check(expected6);
 
 		for (char z = 'A'; z <= 'C'; z++) {
@@ -113,6 +125,7 @@ public class FSSTester {
 		}
 		fss.listContents();
 
+		//test #12
 		check(expected9);
 
 		for (int i = 0; i < 9; i++) {
@@ -120,6 +133,7 @@ public class FSSTester {
 		}
 		fss.listContents();
 
+		//test #13
 		check(expected6);
 
 		fss.doCommand(new Command(Command.MAKE_DOCUMENT, "insidefile"));
@@ -129,6 +143,7 @@ public class FSSTester {
 		fss.doCommand(new Command(Command.MAKE_DOCUMENT, "finishingup"));
 		fss.listContents();
 
+		//test #14
 		check(expected10);
 
 		for (int i = 0; i < 20; i++) {
@@ -136,6 +151,7 @@ public class FSSTester {
 		}
 		fss.listContents();
 
+		//test #15
 		check(expected0);
 
 		showResults();
@@ -157,18 +173,37 @@ public class FSSTester {
 	public void check(String expected) throws Exception {
 
 		testCount++;
+        System.out.println("-----------");
+		System.out.println(ANSIIColors.yellow + "Test number " + testCount + ":" + ANSIIColors.reset);
 
 		String actual = toStringAllPaths(fss);
 
-		System.out.println("****************");
-		System.out.print(actual);
+        System.out.printf(ANSIIColors.blue + "%-50s" + " %-50s"
+                + ANSIIColors.reset + "\n", "Actual:", "Expected:");
+
+        String[] splitActual = actual.split("\\r?\\n");
+        String[] splitExpected = expected.split("\\r?\\n");
+
+        for (int i = 0; i < Math.max(splitActual.length, splitExpected.length); ++i)
+        {
+            if (i < splitActual.length)
+            {
+                System.out.printf("%-50s ", splitActual[i]);
+            }
+
+            if (i < splitExpected.length)
+            {
+                System.out.printf("%-50s", splitExpected[i]);
+            }
+            System.out.println();
+        }
 		System.out.println("****************");
 
 		if (actual.equals(expected)) {
-			System.out.println("Test " + testCount + " passed");
+			System.out.println(ANSIIColors.green + "Test " + testCount + " passed" + ANSIIColors.reset);
 			testsPassed++;
 		} else {
-			System.out.println("Test " + testCount + " failed");
+			System.out.println(ANSIIColors.red +  "Test " + testCount + " failed" + ANSIIColors.reset);
 		}
 		System.out.println("****************");
 	}

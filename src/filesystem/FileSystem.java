@@ -15,13 +15,10 @@ public class FileSystem implements FileSystemInterface {
     private Folder current;
     private Stack<Command> commandStack;
 
-    boolean keepRunning;
-
     public FileSystem(String name) {
         root = new Folder(name, null);
         current = root;
         commandStack = new LinkedListStack<>();
-        keepRunning = true;
     }
 
     @Override
@@ -37,14 +34,13 @@ public class FileSystem implements FileSystemInterface {
 
         String name = scanner.next();
 
-        while (name.equals(""))
+        while ("".equals(name))
         {
             scanner.nextLine(); //get rid of that fracking newline
             System.out.println("Incorrect username, try again");
         }
         scanner.nextLine(); //get rid of that fracking newline
 
-//        Pattern pattern = Pattern.compile("(exit)|(ls)|((cd)|(touch)|(mkdir))\\s+(\\S+)");
         Pattern pattern = Pattern.compile("(exit)|(ls)|(\\S+)\\s+(\\S+)");
 
         Matcher matcher = pattern.matcher("");
@@ -53,7 +49,6 @@ public class FileSystem implements FileSystemInterface {
         {
             System.out.print(ANSIIColors.green + name + "@" + computerName + ":");
             System.out.print(ANSIIColors.blue + current.getFullPath() + ANSIIColors.reset + "$ ");
-            //keepRunning = false;
             String s = scanner.nextLine();
             matcher.reset(s);
             boolean matches = matcher.matches();
@@ -75,11 +70,11 @@ public class FileSystem implements FileSystemInterface {
                     {
                         case "cd":
                             String dest = matcher.group(lastGroup);
-                            if (dest.equals(".."))
+                            if ("..".equals(dest))
                             {
                                 goUp();
                             }
-                            else if (!dest.equals("."))
+                            else if (!".".equals(dest))
                             {
                                 goIntoFolder(matcher.group(lastGroup));
                             }
@@ -114,27 +109,31 @@ public class FileSystem implements FileSystemInterface {
 
     @Override
     public void doCommand(Command cmd) {
-        commandStack.push(cmd);
+        boolean isSuccessful;
         switch (cmd.getCommandCode()) {
             case Command.MAKE_FOLDER:
-                makeFolder(cmd.getName());
+                isSuccessful = makeFolder(cmd.getName());
                 break;
             case Command.MAKE_DOCUMENT:
-                makeDocument(cmd.getName());
+                isSuccessful = makeDocument(cmd.getName());
                 break;
             case Command.REMOVE_DOCUMENT:
-                removeDocument(cmd.getName());
+                isSuccessful = removeDocument(cmd.getName());
                 break;
-            case Command.REMOVE_EMPTY_FODLER:
-                removeFolder(cmd.getName());
+            case Command.REMOVE_EMPTY_FOLDER:
+                isSuccessful = removeFolder(cmd.getName());
                 break;
             case Command.GO_INTO_FOLDER:
-                goIntoFolder(cmd.getName());
+                isSuccessful = goIntoFolder(cmd.getName());
                 break;
-            default:
+            default: //GO_UP
                 cmd.attachName(current.getName());
-                goUp();
+                isSuccessful = goUp();
                 break;
+        }
+
+        if (isSuccessful) {
+            commandStack.push(cmd);
         }
     }
 
@@ -157,13 +156,13 @@ public class FileSystem implements FileSystemInterface {
             case Command.REMOVE_DOCUMENT:
                 makeDocument(cmd.getName());
                 break;
-            case Command.REMOVE_EMPTY_FODLER:
+            case Command.REMOVE_EMPTY_FOLDER:
                 makeFolder(cmd.getName());
                 break;
             case Command.GO_INTO_FOLDER:
                 goUp();
                 break;
-            default:
+            default: //GO_UP
                 goIntoFolder(cmd.getName());
                 break;
         }
@@ -182,58 +181,70 @@ public class FileSystem implements FileSystemInterface {
         return root.getAllPaths();
     }
 
-    private void makeFolder(String name) {
+    private boolean makeFolder(String name) {
         if (!current.addEntry(new Folder(name, current)))
         {
             System.out.println("Error. Couldn't add folder " + name);
+            return false;
         }
+        return true;
     }
 
-    private void makeDocument(String name) {
+    private boolean makeDocument(String name) {
         if (!current.addEntry(new Document(name, current)))
         {
             System.out.println("Error. Couldn't add document " + name);
+            return false;
         }
+
+        return true;
     }
 
-    private void removeDocument(String name) {
-        if (current.isFolder(name))
-        {
-            System.out.println("Error. The file corresponds to a folder");
-            return;
-        }
+    private boolean removeDocument(String name) {
+//        if (current.isFolder(name))
+//        {
+//            System.out.println("Error. The file corresponds to a folder");
+//            return false;
+//        }
 
-        if (current.removeEntry(name)) {
+        if (current.removeEntry(name, false)) {
             System.out.println("Successfully removed document " + name);
+            return true;
         } else {
             System.out.println("Error. The document doesn't exist");
+            return false;
         }
     }
 
-    private void removeFolder(String name) {
-        if (current.removeEntry(name)) {
+    private boolean removeFolder(String name) {
+        if (current.removeEntry(name, true)) {
             System.out.println("Successfully removed folder " + name);
+            return true;
         } else {
             System.out.println("Error. The folder doesn't exist or name corresponds to file");
+            return false;
         }
     }
 
-    private void goIntoFolder(String name) {
+    private boolean goIntoFolder(String name) {
         if (current.isFolder(name)) {
             current = current.get(name);
-            return;
+            return true;
         }
 
         System.out.println("Error. The folder doesn't exist");
+        return false;
     }
 
-    private void goUp() {
+    private boolean goUp() {
         if (current.getParent() != null) {
             current = current.getParent();
+            return true;
         }
         else
         {
             System.out.println("Error. Already in the top directory");
+            return false;
         }
     }
 }

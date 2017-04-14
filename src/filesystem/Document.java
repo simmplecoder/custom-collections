@@ -11,4 +11,9 @@ public class Document extends FolderOrDocument {
         return false;
     }
 
+    @Override
+    public String toString()
+    {
+        return getName();
+    }
 }

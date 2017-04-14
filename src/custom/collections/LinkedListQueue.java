@@ -13,7 +13,8 @@ public class LinkedListQueue<E> implements Queue<E> {
         if (internalList == null) {
             throw new IllegalArgumentException("null list is not allowed");
         }
-        storage = internalList;
+        storage = new LinkedList<>();
+        storage.addAll(internalList);
     }
 
     @Override

@@ -21,5 +21,9 @@ public class LLQMapTests {
         map.remove("pizza");
 
         System.out.println(map.toString());
+
+        map.define("beef", 50);
+
+        System.out.println(map.toString());
     }
 }

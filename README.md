@@ -27,7 +27,7 @@ Store is an application which has a user console (`Client.java`), which user use
 
 ## Custom unit testing framework
 
-During writing of the Linked List, I found a need for a tool that would allow me to write randomized unit tests, which was crucial in creating correct and robust code. The aim was to write something small, so that writing unit test wouldn't be cumbersome. More about it can be read [here](./src/custom/unit/UnitTest class.md).
+During writing of the Linked List, I found a need for a tool that would allow me to write randomized unit tests, which was crucial in creating correct and robust code. The aim was to write something small, so that writing unit test wouldn't be cumbersome. More about it can be read in the `/src/custom/unit/UnitTest class.md`.
 
 ## Robot world
 

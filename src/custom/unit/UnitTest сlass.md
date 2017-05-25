@@ -1,9 +1,9 @@
-#Abstract
-Intense testing usually requires a lot of boilerplate, such as checking for exceptions since testing method will include `throws` statement. The class aims to get rid of all of the boilerplate and provide tools such as IntelliJ IDEA's generator to write the remaining boilerplate for the programmer. It also should encourage proper unit testing, such as randomizing input and making multiple runs if the testing target supports that. . 
+# Abstract
+Intense testing usually requires a lot of boilerplate, such as checking for exceptions since testing method will include `throws` statement. The class aims to get rid of all of the boilerplate and provide required tools to make thorough, randomized tests. It also should encourage proper unit testing, such as randomizing input and making multiple runs if the testing target supports that. . 
 
-#<font color="purple">UnitTest</font>
+# <font color="purple">UnitTest</font>
 
-##Description
+## Description
 
 The class aims to be easy to use correctly and hard to use incorrectly. It also lifts some boilerplate, but parameters such as `runCount` must be provided.
  
